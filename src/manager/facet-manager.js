@@ -193,13 +193,26 @@ export class FacetManager {
           }
           // Check if facet already exists
           if (this.#facets.has(kind)) {
-            // Allow overwrite if facet has shouldOverwrite() returning true
+            const existingFacets = this.#facets.get(kind);
+            const existingFacetsArray = Array.isArray(existingFacets) ? existingFacets : [existingFacets];
+            
+            // Check if this is the same facet instance (added during verify phase)
+            const isSameInstance = existingFacetsArray.includes(facet);
+            
+            if (isSameInstance) {
+              // Same facet instance - already registered during verify
+              // Just track it for initialization, don't add it again
+              this.#txn.trackAddition(kind);
+              continue; // Skip registration, but it will be initialized below
+            }
+            
+            // Different facet instance - check if we can overwrite
             const canOverwrite = facet.shouldOverwrite?.() === true;
             if (!canOverwrite) {
               throw new Error(`FacetManager.addMany: facet '${kind}' already exists and new facet does not allow overwrite`);
             }
             // Overwrite allowed - dispose old facets but keep them in the array for find() by orderIndex
-            const existingFacets = this.#facets.get(kind);
+            // Reuse existingFacets from above
             if (Array.isArray(existingFacets)) {
               // Dispose all existing facets
               for (const oldFacet of existingFacets) {
@@ -234,13 +247,16 @@ export class FacetManager {
           }
           const facets = this.#facets.get(kind);
           if (Array.isArray(facets)) {
-            facets.push(facet);
-            // Sort by orderIndex (nulls go to end)
-            facets.sort((a, b) => {
-              const aIdx = a.orderIndex ?? Infinity;
-              const bIdx = b.orderIndex ?? Infinity;
-              return aIdx - bIdx;
-            });
+            // Only add if not already in the array (prevent duplicates)
+            if (!facets.includes(facet)) {
+              facets.push(facet);
+              // Sort by orderIndex (nulls go to end)
+              facets.sort((a, b) => {
+                const aIdx = a.orderIndex ?? Infinity;
+                const bIdx = b.orderIndex ?? Infinity;
+                return aIdx - bIdx;
+              });
+            }
           } else {
             // Legacy: convert to array
             this.#facets.set(kind, [this.#facets.get(kind), facet]);
@@ -251,9 +267,10 @@ export class FacetManager {
         // Then, initialize all facets at this level in parallel
         const initPromises = level.map(async (kind) => {
           const facet = facetsByKind[kind];
+          if (!facet) return; // Skip if facet not found
           
           try {
-            // Initialize facet
+            // Initialize facet (only if not already initialized)
             if (opts.init && typeof facet.init === 'function') {
               await facet.init(opts.ctx, opts.api, this.#subsystem);
             }
@@ -307,7 +324,11 @@ export class FacetManager {
     
     // Check if property already exists
     if (facetKind in this.#subsystem) {
-      // Allow overwrite if facet has shouldOverwrite() returning true
+      // If it's the same facet instance, no need to re-attach
+      if (this.#subsystem[facetKind] === facet) {
+        return facet;
+      }
+      // Different facet instance - check if we can overwrite
       const canOverwrite = facet.shouldOverwrite?.() === true;
       if (!canOverwrite) {
         throw new Error(`FacetManager.attach: cannot attach '${facetKind}' – property already exists on subsystem and facet does not allow overwrite`);
@@ -442,14 +463,28 @@ export class FacetManager {
   }
   
   getAllKinds() { return [...this.#facets.keys()]; }
-  getAll() {
+  
+  /**
+   * Get all facets of a specific kind, or all facets grouped by kind.
+   * @param {string} [kind] - Optional facet kind to retrieve. If provided, returns array of facets for that kind.
+   * @returns {Array<Object>|Object} If kind is provided, returns array of facets. Otherwise returns map of kind -> last facet (for backward compatibility).
+   */
+  getAll(kind) {
+    // If kind is provided, return array of facets for that kind
+    if (kind !== undefined) {
+      if (!kind || typeof kind !== 'string') return [];
+      const facets = this.#facets.get(kind);
+      if (!facets) return [];
+      return Array.isArray(facets) ? [...facets] : [facets]; // Return a copy to prevent external modification
+    }
+    
     // Return map of kind -> last facet (for backward compatibility)
     const result = {};
-    for (const [kind, facets] of this.#facets.entries()) {
+    for (const [k, facets] of this.#facets.entries()) {
       if (Array.isArray(facets)) {
-        result[kind] = facets.length > 0 ? facets[facets.length - 1] : undefined;
+        result[k] = facets.length > 0 ? facets[facets.length - 1] : undefined;
       } else {
-        result[kind] = facets;
+        result[k] = facets;
       }
     }
     return result;

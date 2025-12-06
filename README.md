@@ -10,6 +10,7 @@ Mycelia Plugin System is a standalone plugin architecture extracted from [Myceli
 - **Dependency resolution** - Automatic topological sorting
 - **Transaction safety** - Atomic installation with rollback
 - **Lifecycle management** - Built-in initialization and disposal
+- **Hot reloading** - Reload and extend plugins without full teardown
 - **Facet contracts** - Runtime validation of plugin interfaces
 - **Standalone mode** - Works without message system or other dependencies
 
@@ -120,6 +121,26 @@ try {
 }
 ```
 
+### Hot Reloading
+Reload the system and add more plugins without full teardown:
+
+```javascript
+// Initial build
+await system.use(useDatabase).build();
+
+// Hot reload - add more plugins
+await system.reload();
+await system.use(useCache).use(useAuth).build();
+
+// All plugins (old + new) are now active
+```
+
+The `reload()` method:
+- Disposes all facets and resets built state
+- Preserves hooks and configuration
+- Allows adding more hooks and rebuilding
+- Perfect for development and hot-reload scenarios
+
 ### Facet Contracts
 Validate plugin interfaces at build time:
 
@@ -166,6 +187,15 @@ StandalonePluginSystem
 - **`createLogger()`** - Create a logger
 - **`getDebugFlag()`** - Extract debug flag from config
 
+## Documentation
+
+Comprehensive documentation is available in the [`docs/`](./docs/) directory:
+
+- **[Getting Started Guide](./docs/getting-started/README.md)** - Quick start with examples
+- **[Hooks and Facets Overview](./docs/core-concepts/HOOKS-AND-FACETS-OVERVIEW.md)** - Core concepts
+- **[Standalone Plugin System](./docs/standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete usage guide
+- **[Documentation Index](./docs/README.md)** - Full documentation index
+
 ## Examples
 
 See the `examples/` directory for:
@@ -173,6 +203,28 @@ See the `examples/` directory for:
 - Plugins with dependencies
 - Lifecycle management
 - Contract validation
+- Hot reloading
+
+## CLI Tool
+
+The package includes a CLI tool for scaffolding hooks, contracts, and projects:
+
+```bash
+# Create a new hook
+npx @mycelia/plugin-system create hook database
+
+# Create a new contract
+npx @mycelia/plugin-system create contract database
+
+# Initialize a new project
+npx @mycelia/plugin-system init my-app
+```
+
+Or install globally:
+```bash
+npm install -g @mycelia/plugin-system
+mycelia-kernel-plugin create hook database
+```
 
 ## Testing
 

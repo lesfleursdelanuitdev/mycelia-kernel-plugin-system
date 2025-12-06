@@ -38,9 +38,13 @@
   },
   "files": [
     "src/",
+    "bin/",
     "README.md",
     "LICENSE"
   ],
+  "bin": {
+    "mycelia-kernel-plugin": "./bin/cli.js"
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",

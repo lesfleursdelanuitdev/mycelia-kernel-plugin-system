@@ -243,6 +243,70 @@ export class BaseSubsystem {
     return this._disposePromise;
   }
 
+  /**
+   * Reload the subsystem: dispose all facets and reset built state,
+   * while preserving hooks and configuration. Allows adding more hooks
+   * and rebuilding.
+   * 
+   * This method:
+   * - Disposes all facets and child subsystems
+   * - Resets built state (allows use() to work again)
+   * - Preserves hooks, defaultHooks, context, and lifecycle callbacks
+   * 
+   * @returns {Promise<BaseSubsystem>} This subsystem for chaining
+   * 
+   * @example
+   * // Initial build
+   * await system.use(useDatabase).build();
+   * 
+   * // Reload and extend
+   * await system.reload().use(useCache).build();
+   */
+  async reload() {
+    // Wait for any in-progress operations
+    if (this._buildPromise) {
+      await this._buildPromise.catch(() => {}); // Wait even if failed
+    }
+    if (this._disposePromise) {
+      await this._disposePromise.catch(() => {}); // Wait even if failed
+    }
+    
+    // Only proceed if actually built
+    if (!this._isBuilt) {
+      return this; // Already not built, nothing to reload
+    }
+    
+    // Dispose all facets (clean slate)
+    if (this.api?.__facets) {
+      await this.api.__facets.disposeAll(this);
+    }
+    
+    // Dispose child subsystems
+    await disposeChildren(this);
+    
+    // Reset built state (allows use() to work again)
+    this._isBuilt = false;
+    
+    // Invalidate builder cache (force recalculation on next build)
+    this._builder.invalidate();
+    
+    // Clear promises
+    this._buildPromise = null;
+    this._disposePromise = null;
+    
+    // NOTE: Preserved:
+    // - this.hooks (user-added hooks)
+    // - this.defaultHooks (default hooks)
+    // - this.ctx (context/config)
+    // - this._initCallbacks
+    // - this._disposeCallbacks
+    
+    const logger = createSubsystemLogger(this);
+    logger.log('Reloaded - ready for extension and rebuild');
+    
+    return this; // For chaining: system.reload().use(hook).build()
+  }
+
   // ==== Message flow (No-ops for standalone plugin system) ====
 
   /**
