@@ -278,7 +278,9 @@ export class FacetManager {
             // Attach facet after successful init
             if (opts.attach && facet.shouldAttach?.()) {
               // Only attach if not already attached (same instance check)
-              if (!(kind in this.#subsystem && this.#subsystem[kind] === facet)) {
+              // Check both if property exists and if it's the same instance
+              const alreadyAttached = kind in this.#subsystem && this.#subsystem[kind] === facet;
+              if (!alreadyAttached) {
                 this.attach(kind);
               }
             }
@@ -325,18 +327,26 @@ export class FacetManager {
     const facet = this.find(facetKind);
     if (!facet) throw new Error(`FacetManager.attach: facet '${facetKind}' not found`);
     
-    // Check if property already exists
+    // Check if property already exists and is actually a facet (not the API object or other properties)
     if (facetKind in this.#subsystem) {
-      // If it's the same facet instance, no need to re-attach
-      if (this.#subsystem[facetKind] === facet) {
+      const existingValue = this.#subsystem[facetKind];
+      // Skip if it's the API object (which has __facets property) - don't overwrite it!
+      if (existingValue && typeof existingValue === 'object' && '__facets' in existingValue && existingValue !== facet) {
+        // This is the API object, not a facet - skip attachment to avoid overwriting it
+        const logger = createSubsystemLogger(this.#subsystem);
+        logger.log(`Skipping attachment of facet '${facetKind}' - property name conflicts with subsystem API object`);
         return facet;
+      } else if (existingValue === facet) {
+        // If it's the same facet instance, no need to re-attach
+        return facet;
+      } else {
+        // Different facet instance - check if we can overwrite
+        const canOverwrite = facet.shouldOverwrite?.() === true;
+        if (!canOverwrite) {
+          throw new Error(`FacetManager.attach: cannot attach '${facetKind}' – property already exists on subsystem and facet does not allow overwrite`);
+        }
+        // Overwrite allowed - replace the property
       }
-      // Different facet instance - check if we can overwrite
-      const canOverwrite = facet.shouldOverwrite?.() === true;
-      if (!canOverwrite) {
-        throw new Error(`FacetManager.attach: cannot attach '${facetKind}' – property already exists on subsystem and facet does not allow overwrite`);
-      }
-      // Overwrite allowed - replace the property
     }
     
     this.#subsystem[facetKind] = facet;
