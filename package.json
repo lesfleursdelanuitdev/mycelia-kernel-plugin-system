@@ -1,0 +1,59 @@
+{
+  "name": "@mycelia/plugin-system",
+  "version": "1.0.0",
+  "description": "A sophisticated, dependency-aware plugin system with transaction safety and lifecycle management",
+  "license": "MIT",
+  "type": "module",
+  "author": {
+    "name": "lesfleursdelanuitdev",
+    "url": "https://github.com/lesfleursdelanuitdev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lesfleursdelanuitdev/mycelia-plugin-system.git"
+  },
+  "homepage": "https://github.com/lesfleursdelanuitdev/mycelia-plugin-system#readme",
+  "bugs": {
+    "url": "https://github.com/lesfleursdelanuitdev/mycelia-plugin-system/issues"
+  },
+  "keywords": [
+    "plugin-system",
+    "hooks",
+    "facets",
+    "dependency-injection",
+    "lifecycle",
+    "composable",
+    "transaction-safe",
+    "dependency-resolution"
+  ],
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./core": "./src/core/index.js",
+    "./manager": "./src/manager/index.js",
+    "./builder": "./src/builder/index.js",
+    "./system": "./src/system/index.js",
+    "./contract": "./src/contract/index.js",
+    "./contract/contracts": "./src/contract/contracts/index.js"
+  },
+  "files": [
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
+    "vitest": "^2.1.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
