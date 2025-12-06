@@ -17,7 +17,7 @@ Mycelia Plugin System is a standalone plugin architecture extracted from [Myceli
 ## Quick Start
 
 ```javascript
-import { StandalonePluginSystem, createHook, Facet } from '@mycelia/plugin-system';
+import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
 
 // Create a hook
 const useDatabase = createHook({
@@ -70,7 +70,7 @@ await db.query('SELECT * FROM users');
 ## Installation
 
 ```bash
-npm install @mycelia/plugin-system
+npm install mycelia-kernel-plugin
 ```
 
 ## Features
@@ -145,7 +145,7 @@ The `reload()` method:
 Validate plugin interfaces at build time:
 
 ```javascript
-import { createFacetContract } from '@mycelia/plugin-system';
+import { createFacetContract } from 'mycelia-kernel-plugin';
 
 const databaseContract = createFacetContract({
   name: 'database',
@@ -211,18 +211,18 @@ The package includes a CLI tool for scaffolding hooks, contracts, and projects:
 
 ```bash
 # Create a new hook
-npx @mycelia/plugin-system create hook database
+npx mycelia-kernel-plugin create hook database
 
 # Create a new contract
-npx @mycelia/plugin-system create contract database
+npx mycelia-kernel-plugin create contract database
 
 # Initialize a new project
-npx @mycelia/plugin-system init my-app
+npx mycelia-kernel-plugin init my-app
 ```
 
 Or install globally:
 ```bash
-npm install -g @mycelia/plugin-system
+npm install -g mycelia-kernel-plugin
 mycelia-kernel-plugin create hook database
 ```
 

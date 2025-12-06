@@ -111,7 +111,7 @@ function createHook(name) {
     process.exit(1);
   }
 
-  const template = `import { createHook, Facet } from '@mycelia/plugin-system';
+  const template = `import { createHook, Facet } from 'mycelia-kernel-plugin';
 
 /**
  * ${className} Hook
@@ -197,7 +197,7 @@ function createContract(name) {
     process.exit(1);
   }
 
-  const template = `import { createFacetContract } from '@mycelia/plugin-system';
+  const template = `import { createFacetContract } from 'mycelia-kernel-plugin';
 
 /**
  * ${sanitizedName} Contract
@@ -219,7 +219,7 @@ export const ${contractName}Contract = createFacetContract({
 });
 
 // Register with default registry (optional)
-// import { defaultContractRegistry } from '@mycelia/plugin-system';
+// import { defaultContractRegistry } from 'mycelia-kernel-plugin';
 // defaultContractRegistry.register(${contractName}Contract);
 `;
 
@@ -258,7 +258,7 @@ function initProject(projectName) {
       test: 'vitest run'
     },
     dependencies: {
-      '@mycelia/plugin-system': '^1.0.0'
+      'mycelia-kernel-plugin': '^1.0.0'
     },
     devDependencies: {
       vitest: '^2.1.5'
@@ -288,7 +288,7 @@ npm start
 Use the CLI to scaffold new plugins:
 
 \`\`\`bash
-npx @mycelia/plugin-system create hook my-plugin
+npx mycelia-kernel-plugin create hook my-plugin
 \`\`\`
 
 ## Structure
@@ -301,7 +301,7 @@ npx @mycelia/plugin-system create hook my-plugin
   writeFileSync(join(projectDir, 'README.md'), readme, 'utf8');
 
   // Create example hook
-  const exampleHook = `import { createHook, Facet } from '@mycelia/plugin-system';
+  const exampleHook = `import { createHook, Facet } from 'mycelia-kernel-plugin';
 
 /**
  * Example Hook
@@ -329,7 +329,7 @@ export const useExample = createHook({
   writeFileSync(join(projectDir, 'src/hooks/use-example.js'), exampleHook, 'utf8');
 
   // Create main index.js
-  const indexJs = `import { StandalonePluginSystem } from '@mycelia/plugin-system';
+  const indexJs = `import { StandalonePluginSystem } from 'mycelia-kernel-plugin';
 import { useExample } from './hooks/use-example.js';
 
 async function main() {

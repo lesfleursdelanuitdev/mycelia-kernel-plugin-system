@@ -1,5 +1,5 @@
 {
-  "name": "@mycelia/plugin-system",
+  "name": "mycelia-kernel-plugin",
   "version": "1.0.0",
   "description": "A sophisticated, dependency-aware plugin system with transaction safety and lifecycle management",
   "license": "MIT",
@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lesfleursdelanuitdev/mycelia-plugin-system.git"
+    "url": "https://github.com/lesfleursdelanuitdev/mycelia-kernel-plugin-system.git"
   },
-  "homepage": "https://github.com/lesfleursdelanuitdev/mycelia-plugin-system#readme",
+  "homepage": "https://github.com/lesfleursdelanuitdev/mycelia-kernel-plugin-system#readme",
   "bugs": {
-    "url": "https://github.com/lesfleursdelanuitdev/mycelia-plugin-system/issues"
+    "url": "https://github.com/lesfleursdelanuitdev/mycelia-kernel-plugin-system/issues"
   },
   "keywords": [
     "plugin-system",

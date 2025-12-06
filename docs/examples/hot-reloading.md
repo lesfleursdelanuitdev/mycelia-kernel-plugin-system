@@ -5,7 +5,7 @@ This example demonstrates how to use the `reload()` method for hot reloading plu
 ## Basic Hot Reload
 
 ```javascript
-import { StandalonePluginSystem, createHook, Facet } from '@mycelia/plugin-system';
+import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
 
 // Create some hooks
 const useDatabase = createHook({
@@ -78,7 +78,7 @@ await auth.login('user', 'pass');
 ## Development Workflow
 
 ```javascript
-import { StandalonePluginSystem, createHook, Facet } from '@mycelia/plugin-system';
+import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
 
 const system = new StandalonePluginSystem('dev-app');
 
@@ -122,7 +122,7 @@ await hotReload(useAuth);
 ## Hot Reload with Lifecycle
 
 ```javascript
-import { StandalonePluginSystem, createHook, Facet } from '@mycelia/plugin-system';
+import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
 
 const lifecycle = [];
 
@@ -159,7 +159,7 @@ console.log(lifecycle); // ['database:init', 'database:dispose', 'database:init'
 ## Hot Reload with Configuration Updates
 
 ```javascript
-import { StandalonePluginSystem, createHook, Facet } from '@mycelia/plugin-system';
+import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
 
 const useDatabase = createHook({
   kind: 'database',

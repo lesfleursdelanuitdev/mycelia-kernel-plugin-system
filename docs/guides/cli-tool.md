@@ -7,13 +7,13 @@ The Mycelia Plugin System includes a CLI tool (`mycelia-kernel-plugin`) for scaf
 The CLI is included with the package. Use it via `npx`:
 
 ```bash
-npx @mycelia/plugin-system <command>
+npx mycelia-kernel-plugin <command>
 ```
 
 Or install globally:
 
 ```bash
-npm install -g @mycelia/plugin-system
+npm install -g mycelia-kernel-plugin
 mycelia-kernel-plugin <command>
 ```
 
@@ -43,7 +43,7 @@ mycelia-kernel-plugin create hook database
 
 **Generated Template:**
 ```javascript
-import { createHook, Facet } from '@mycelia/plugin-system';
+import { createHook, Facet } from 'mycelia-kernel-plugin';
 
 export const useDatabase = createHook({
   kind: 'database',
@@ -94,7 +94,7 @@ mycelia-kernel-plugin create contract database
 
 **Generated Template:**
 ```javascript
-import { createFacetContract } from '@mycelia/plugin-system';
+import { createFacetContract } from 'mycelia-kernel-plugin';
 
 export const databaseContract = createFacetContract({
   name: 'database',
@@ -177,8 +177,8 @@ cd my-plugin-system
 npm install
 
 # 4. Create your hooks
-npx @mycelia/plugin-system create hook database
-npx @mycelia/plugin-system create hook cache
+npx mycelia-kernel-plugin create hook database
+npx mycelia-kernel-plugin create hook cache
 
 # 5. Start developing
 npm start
@@ -230,7 +230,7 @@ If files are created in the wrong location:
 ### Import Errors
 
 If imports fail after generation:
-- Ensure `@mycelia/plugin-system` is installed
+- Ensure `mycelia-kernel-plugin` is installed
 - Check that the package name matches your `package.json`
 - Verify the import path is correct
 

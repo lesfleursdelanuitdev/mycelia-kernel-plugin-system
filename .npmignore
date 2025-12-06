@@ -1,0 +1,55 @@
+# Development files
+node_modules/
+.git/
+.gitignore
+*.log
+.DS_Store
+
+# Test files
+tests/
+test/
+*.test.js
+*.spec.js
+vitest.config.js
+
+# Documentation (keep README.md and LICENSE)
+docs/
+*.md
+!README.md
+CODEBASE-ANALYSIS.md
+DOCUMENTATION-PLAN.md
+EXTRACTION-PROGRESS.md
+BUGFIX-INIT-CALLBACKS.md
+
+# Examples (optional - you might want to include these)
+examples/
+
+# Development config
+eslint.config.js
+.editorconfig
+.prettierrc
+.prettierignore
+
+# Build artifacts
+dist/
+build/
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# Misc
+.env
+.env.local
+.env.*.local
+
