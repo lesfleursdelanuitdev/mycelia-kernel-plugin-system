@@ -277,7 +277,10 @@ export class FacetManager {
             
             // Attach facet after successful init
             if (opts.attach && facet.shouldAttach?.()) {
-              this.attach(kind);
+              // Only attach if not already attached (same instance check)
+              if (!(kind in this.#subsystem && this.#subsystem[kind] === facet)) {
+                this.attach(kind);
+              }
             }
           } catch (err) {
             // Local rollback for this facet

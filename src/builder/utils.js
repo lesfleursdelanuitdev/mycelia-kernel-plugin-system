@@ -115,8 +115,13 @@ export async function buildSubsystem(subsystem, plan) {
       // New facet - add normally
       facetsToAdd[kind] = facet;
       kindsToAdd.push(kind);
+    } else if (existingFacet === facet) {
+      // Same facet instance - this was added during verify phase for dependency lookups
+      // It needs to be properly initialized/attached, so add it
+      facetsToAdd[kind] = facet;
+      kindsToAdd.push(kind);
     } else {
-      // Facet already exists - check if we can overwrite
+      // Different facet instance - check if we can overwrite
       const canOverwrite = facet.shouldOverwrite?.() === true;
       if (canOverwrite) {
         // Remove old facet first, then add new one
