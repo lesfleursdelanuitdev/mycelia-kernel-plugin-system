@@ -29,9 +29,15 @@ export { FacetContractRegistry, defaultContractRegistry } from './contract/index
 // Export all contracts
 export * from './contract/contracts/index.js';
 
+// Hook exports
+export { useListeners } from './hooks/listeners/use-listeners.js';
+export { useQueue } from './hooks/queue/use-queue.js';
+export { useSpeak } from './hooks/speak/use-speak.js';
+
 // Utility exports
 export { createLogger, createSubsystemLogger } from './utils/logger.js';
 export { getDebugFlag } from './utils/debug-flag.js';
+export { findFacet } from './utils/find-facet.js';
 export { 
   parseVersion, 
   isValidSemver, 

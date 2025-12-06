@@ -24,6 +24,7 @@ import { listenersContract } from './contracts/listeners.contract.js';
 import { hierarchyContract } from './contracts/hierarchy.contract.js';
 import { schedulerContract } from './contracts/scheduler.contract.js';
 import { serverContract } from './contracts/server.contract.js';
+import { speakContract } from './contracts/speak.contract.js';
 import { websocketContract } from './contracts/websocket.contract.js';
 import { storageContract } from './contracts/storage.contract.js';
 
@@ -42,6 +43,7 @@ defaultContractRegistry.register(listenersContract);
 defaultContractRegistry.register(hierarchyContract);
 defaultContractRegistry.register(schedulerContract);
 defaultContractRegistry.register(serverContract);
+defaultContractRegistry.register(speakContract);
 defaultContractRegistry.register(websocketContract);
 defaultContractRegistry.register(storageContract);
 
@@ -55,6 +57,7 @@ export { listenersContract } from './contracts/listeners.contract.js';
 export { hierarchyContract } from './contracts/hierarchy.contract.js';
 export { schedulerContract } from './contracts/scheduler.contract.js';
 export { serverContract } from './contracts/server.contract.js';
+export { speakContract } from './contracts/speak.contract.js';
 export { websocketContract } from './contracts/websocket.contract.js';
 export { storageContract } from './contracts/storage.contract.js';
 
