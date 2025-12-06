@@ -278,6 +278,17 @@ export class BaseSubsystem {
     
     // Dispose all facets (clean slate)
     if (this.api?.__facets) {
+      // Remove attached properties before disposing (to allow re-attachment on rebuild)
+      const facetKinds = Array.from(this.api.__facets[Symbol.iterator]?.() || []);
+      for (const [kind] of facetKinds) {
+        if (kind in this && this[kind] !== undefined) {
+          try {
+            delete this[kind];
+          } catch {
+            // Best-effort cleanup (property might be non-configurable)
+          }
+        }
+      }
       await this.api.__facets.disposeAll(this);
     }
     
