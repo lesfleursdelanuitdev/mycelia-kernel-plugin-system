@@ -15,6 +15,8 @@ Mycelia Plugin System is a standalone plugin architecture extracted from [Myceli
 - **Standalone mode** - Works without message system or other dependencies
 - **Built-in hooks** - Ships with `useListeners` for event-driven architectures (see [Simple Event System Example](#simple-event-system-example)), plus `useQueue` and `useSpeak`
 
+**Facets** are the concrete runtime capabilities produced by hooks and attached to the system.
+
 ## Quick Start
 
 ### Using useBase (Recommended)
@@ -150,6 +152,10 @@ await eventSystem.dispose();
 npm install mycelia-kernel-plugin
 ```
 
+## What This System Is Not
+
+This system intentionally does not provide dependency injection containers, service locators, or global mutable state. It focuses on explicit lifecycle management and composable plugin architecture rather than implicit dependency resolution or shared global state.
+
 ## Features
 
 ### Hook System
@@ -218,6 +224,8 @@ The `reload()` method:
 - Allows adding more hooks and rebuilding
 - Perfect for development and hot-reload scenarios
 
+**Note:** Persistent external state (e.g., database contents, file system state) is not automatically reverted. The `reload()` method only manages the plugin system's internal state.
+
 ### Facet Contracts
 Validate plugin interfaces at build time:
 
@@ -231,6 +239,11 @@ const databaseContract = createFacetContract({
 });
 
 // Contract is automatically enforced during build
+```
+
+If a facet doesn't satisfy its contract, build fails with a clear error:
+```
+Error: FacetContract 'database': facet is missing required methods: close
 ```
 
 ## Architecture
