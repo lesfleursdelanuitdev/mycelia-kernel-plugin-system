@@ -13,11 +13,14 @@ Mycelia Plugin System is a standalone plugin architecture extracted from [Myceli
 - **Hot reloading** - Reload and extend plugins without full teardown
 - **Facet contracts** - Runtime validation of plugin interfaces
 - **Standalone mode** - Works without message system or other dependencies
+- **Built-in hooks** - Ships with `useListeners` for event-driven architectures (see [Simple Event System Example](#simple-event-system-example)), plus `useQueue` and `useSpeak`
 
 ## Quick Start
 
+### Using useBase (Recommended)
+
 ```javascript
-import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
+import { useBase, createHook, Facet } from 'mycelia-kernel-plugin';
 
 // Create a hook
 const useDatabase = createHook({
@@ -51,6 +54,25 @@ const useDatabase = createHook({
   }
 });
 
+// Create and use the system with fluent API
+const system = await useBase('my-app')
+  .config('database', { host: 'localhost' })
+  .use(useDatabase)
+  .build();
+
+// Use the plugin
+const db = system.find('database');
+await db.query('SELECT * FROM users');
+```
+
+### Using StandalonePluginSystem Directly
+
+```javascript
+import { StandalonePluginSystem, createHook, Facet } from 'mycelia-kernel-plugin';
+
+// Create a hook (same as above)
+const useDatabase = createHook({ /* ... */ });
+
 // Create and use the system
 const system = new StandalonePluginSystem('my-app', {
   config: {
@@ -65,6 +87,61 @@ system
 // Use the plugin
 const db = system.find('database');
 await db.query('SELECT * FROM users');
+```
+
+### Simple Event System Example
+
+Create an event-driven system with `useBase` and `useListeners`:
+
+```javascript
+import { useBase, useListeners } from 'mycelia-kernel-plugin';
+
+// Create an event system
+const eventSystem = await useBase('event-system')
+  .config('listeners', { registrationPolicy: 'multiple' })
+  .use(useListeners)
+  .build();
+
+// Enable listeners
+eventSystem.listeners.enableListeners();
+
+// Register event handlers
+eventSystem.listeners.on('user:created', (message) => {
+  console.log('User created:', message.body);
+});
+
+eventSystem.listeners.on('user:updated', (message) => {
+  console.log('User updated:', message.body);
+});
+
+// Emit events
+eventSystem.listeners.emit('user:created', {
+  type: 'user:created',
+  body: { id: 1, name: 'John Doe' }
+});
+
+eventSystem.listeners.emit('user:updated', {
+  type: 'user:updated',
+  body: { id: 1, name: 'Jane Doe' }
+});
+
+// Multiple handlers for the same event
+eventSystem.listeners.on('order:placed', (message) => {
+  console.log('Order notification:', message.body);
+});
+
+eventSystem.listeners.on('order:placed', (message) => {
+  console.log('Order logging:', message.body);
+});
+
+// Both handlers will be called
+eventSystem.listeners.emit('order:placed', {
+  type: 'order:placed',
+  body: { orderId: 123, total: 99.99 }
+});
+
+// Cleanup
+await eventSystem.dispose();
 ```
 
 ## Installation
@@ -181,6 +258,7 @@ StandalonePluginSystem
 
 - **`createHook()`** - Create a plugin hook
 - **`createFacetContract()`** - Create a facet contract
+- **`useBase()`** - Fluent API builder for StandalonePluginSystem
 
 ### Utilities
 
@@ -193,6 +271,7 @@ Comprehensive documentation is available in the [`docs/`](./docs/) directory:
 
 - **[Getting Started Guide](./docs/getting-started/README.md)** - Quick start with examples
 - **[Hooks and Facets Overview](./docs/core-concepts/HOOKS-AND-FACETS-OVERVIEW.md)** - Core concepts
+- **[Built-in Hooks](./docs/hooks/README.md)** - Documentation for `useListeners`, `useQueue`, and `useSpeak`
 - **[Standalone Plugin System](./docs/standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete usage guide
 - **[Documentation Index](./docs/README.md)** - Full documentation index
 
@@ -204,6 +283,7 @@ See the `examples/` directory for:
 - Lifecycle management
 - Contract validation
 - Hot reloading
+- useBase fluent API
 
 ## CLI Tool
 

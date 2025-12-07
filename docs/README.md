@@ -19,6 +19,12 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 ### Standalone Plugin System
 - **[Standalone Plugin System](./standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete guide to using the system standalone
 
+### Built-in Hooks
+- **[Built-in Hooks Overview](./hooks/README.md)** - Overview of available hooks
+- **[useListeners](./hooks/USE-LISTENERS.md)** - Event-driven listener management
+- **[useQueue](./hooks/USE-QUEUE.md)** - Message queue management
+- **[useSpeak](./hooks/USE-SPEAK.md)** - Simple output/printing functionality
+
 ### Facet Contracts
 - **[Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)** - Contract system overview
 - **[Facet Contract](./facet-contracts/FACET-CONTRACT.md)** - Creating and using contracts
@@ -62,6 +68,7 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **Understand the core concepts** → [Hooks and Facets Overview](./core-concepts/HOOKS-AND-FACETS-OVERVIEW.md)
 - **Learn about BaseSubsystem** → [BaseSubsystem](./core-concepts/BASE-SUBSYSTEM.md)
 - **Create a standalone plugin system** → [Standalone Plugin System](./standalone/STANDALONE-PLUGIN-SYSTEM.md)
+- **Use built-in hooks** → [Built-in Hooks Overview](./hooks/README.md)
 - **Learn about contracts** → [Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)
 - **See examples** → [Examples](./examples/README.md)
 - **Follow a guide** → [Creating Plugins](./guides/creating-plugins.md)
@@ -88,6 +95,7 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - BaseSubsystem Documentation
 - Standalone Plugin System Guide
 - Hooks Documentation
+- Built-in Hooks Documentation (useListeners, useQueue, useSpeak)
 - Facets Documentation
 - Facet Manager Documentation
 - Facet Manager Transaction Documentation

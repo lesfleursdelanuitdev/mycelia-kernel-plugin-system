@@ -38,6 +38,7 @@ export { useSpeak } from './hooks/speak/use-speak.js';
 export { createLogger, createSubsystemLogger } from './utils/logger.js';
 export { getDebugFlag } from './utils/debug-flag.js';
 export { findFacet } from './utils/find-facet.js';
+export { useBase } from './utils/use-base.js';
 export { 
   parseVersion, 
   isValidSemver, 
