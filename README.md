@@ -298,7 +298,7 @@ See the `examples/` directory for:
 - Contract validation
 - Hot reloading
 - useBase fluent API
-- **React Todo App** – A real-world example showing:
+- **[React Todo App](./examples/react-todo/README.md)** – A real-world example showing:
   - Domain logic as a Mycelia facet (`useTodos` hook)
   - Event-driven state synchronization (`todos:changed` events)
   - React bindings (`MyceliaProvider`, `useFacet`, `useListener`)
