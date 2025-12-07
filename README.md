@@ -285,6 +285,7 @@ Comprehensive documentation is available in the [`docs/`](./docs/) directory:
 - **[Getting Started Guide](./docs/getting-started/README.md)** - Quick start with examples
 - **[Hooks and Facets Overview](./docs/core-concepts/HOOKS-AND-FACETS-OVERVIEW.md)** - Core concepts
 - **[Built-in Hooks](./docs/hooks/README.md)** - Documentation for `useListeners`, `useQueue`, and `useSpeak`
+- **[React Bindings](./docs/react/README.md)** - React integration utilities
 - **[Standalone Plugin System](./docs/standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete usage guide
 - **[Documentation Index](./docs/README.md)** - Full documentation index
 
@@ -297,6 +298,10 @@ See the `examples/` directory for:
 - Contract validation
 - Hot reloading
 - useBase fluent API
+- **React Todo App** – A real-world example showing:
+  - Domain logic as a Mycelia facet (`useTodos` hook)
+  - Event-driven state synchronization (`todos:changed` events)
+  - React bindings (`MyceliaProvider`, `useFacet`, `useListener`)
 
 ## CLI Tool
 

@@ -25,6 +25,14 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **[useQueue](./hooks/USE-QUEUE.md)** - Message queue management
 - **[useSpeak](./hooks/USE-SPEAK.md)** - Simple output/printing functionality
 
+### React Bindings
+- **[React Bindings Overview](./react/README.md)** - React integration guide
+- **[Core Bindings](./react/CORE-BINDINGS.md)** - Provider and basic hooks
+- **[Listener Helpers](./react/LISTENER-HELPERS.md)** - Event listener utilities
+- **[Queue Helpers](./react/QUEUE-HELPERS.md)** - Queue management utilities
+- **[Builder Helpers](./react/BUILDER-HELPERS.md)** - System builder utilities
+- **[Facet Hook Generator](./react/FACET-HOOK-GENERATOR.md)** - Custom hook generation
+
 ### Facet Contracts
 - **[Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)** - Contract system overview
 - **[Facet Contract](./facet-contracts/FACET-CONTRACT.md)** - Creating and using contracts
@@ -69,6 +77,7 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **Learn about BaseSubsystem** → [BaseSubsystem](./core-concepts/BASE-SUBSYSTEM.md)
 - **Create a standalone plugin system** → [Standalone Plugin System](./standalone/STANDALONE-PLUGIN-SYSTEM.md)
 - **Use built-in hooks** → [Built-in Hooks Overview](./hooks/README.md)
+- **Use with React** → [React Bindings Overview](./react/README.md)
 - **Learn about contracts** → [Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)
 - **See examples** → [Examples](./examples/README.md)
 - **Follow a guide** → [Creating Plugins](./guides/creating-plugins.md)
@@ -96,6 +105,7 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - Standalone Plugin System Guide
 - Hooks Documentation
 - Built-in Hooks Documentation (useListeners, useQueue, useSpeak)
+- React Bindings Documentation
 - Facets Documentation
 - Facet Manager Documentation
 - Facet Manager Transaction Documentation

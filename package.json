@@ -1,6 +1,6 @@
 {
   "name": "mycelia-kernel-plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A sophisticated, dependency-aware plugin system with transaction safety and lifecycle management",
   "license": "MIT",
   "type": "module",
@@ -34,7 +34,8 @@
     "./builder": "./src/builder/index.js",
     "./system": "./src/system/index.js",
     "./contract": "./src/contract/index.js",
-    "./contract/contracts": "./src/contract/contracts/index.js"
+    "./contract/contracts": "./src/contract/contracts/index.js",
+    "./react": "./src/react/index.js"
   },
   "files": [
     "src/",
@@ -49,6 +50,9 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
