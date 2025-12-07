@@ -33,6 +33,22 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **[Builder Helpers](./react/BUILDER-HELPERS.md)** - System builder utilities
 - **[Facet Hook Generator](./react/FACET-HOOK-GENERATOR.md)** - Custom hook generation
 
+### Vue Bindings
+- **[Vue Bindings Overview](./vue/README.md)** - Vue 3 integration guide
+- **[Core Bindings](./vue/CORE-BINDINGS.md)** - Plugin and basic composables
+- **[Listener Helpers](./vue/LISTENER-HELPERS.md)** - Event listener utilities
+- **[Queue Helpers](./vue/QUEUE-HELPERS.md)** - Queue management utilities
+- **[Builder Helpers](./vue/BUILDER-HELPERS.md)** - System builder utilities
+- **[Facet Composable Generator](./vue/COMPOSABLE-GENERATOR.md)** - Custom composable generation
+
+### Svelte Bindings
+- **[Svelte Bindings Overview](./svelte/README.md)** - Svelte integration guide
+- **[Core Bindings](./svelte/CORE-BINDINGS.md)** - Context and basic stores
+- **[Listener Helpers](./svelte/LISTENER-HELPERS.md)** - Event listener utilities
+- **[Queue Helpers](./svelte/QUEUE-HELPERS.md)** - Queue management utilities
+- **[Builder Helpers](./svelte/BUILDER-HELPERS.md)** - System builder utilities
+- **[Store Generator](./svelte/STORE-GENERATOR.md)** - Custom store generation
+
 ### Facet Contracts
 - **[Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)** - Contract system overview
 - **[Facet Contract](./facet-contracts/FACET-CONTRACT.md)** - Creating and using contracts
@@ -78,6 +94,8 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **Create a standalone plugin system** → [Standalone Plugin System](./standalone/STANDALONE-PLUGIN-SYSTEM.md)
 - **Use built-in hooks** → [Built-in Hooks Overview](./hooks/README.md)
 - **Use with React** → [React Bindings Overview](./react/README.md)
+- **Use with Vue** → [Vue Bindings Overview](./vue/README.md)
+- **Use with Svelte** → [Svelte Bindings Overview](./svelte/README.md)
 - **Learn about contracts** → [Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)
 - **See examples** → [Examples](./examples/README.md)
 - **Follow a guide** → [Creating Plugins](./guides/creating-plugins.md)
@@ -106,6 +124,8 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - Hooks Documentation
 - Built-in Hooks Documentation (useListeners, useQueue, useSpeak)
 - React Bindings Documentation
+- Vue Bindings Documentation
+- Svelte Bindings Documentation
 - Facets Documentation
 - Facet Manager Documentation
 - Facet Manager Transaction Documentation

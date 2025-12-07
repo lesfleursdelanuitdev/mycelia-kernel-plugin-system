@@ -35,7 +35,9 @@
     "./system": "./src/system/index.js",
     "./contract": "./src/contract/index.js",
     "./contract/contracts": "./src/contract/contracts/index.js",
-    "./react": "./src/react/index.js"
+    "./react": "./src/react/index.js",
+    "./vue": "./src/vue/index.js",
+    "./svelte": "./src/svelte/index.js"
   },
   "files": [
     "src/",
@@ -52,7 +54,9 @@
     "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": ">=16.8.0",
+    "vue": ">=3.0.0",
+    "svelte": ">=3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

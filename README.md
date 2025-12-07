@@ -1,11 +1,12 @@
 # Mycelia Plugin System
 
-A sophisticated, dependency-aware plugin system with transaction safety and lifecycle management.
+A sophisticated, **framework-agnostic** plugin system with transaction safety, lifecycle management, and official bindings for React and Vue 3.
 
 ## Overview
 
-Mycelia Plugin System is a standalone plugin architecture extracted from [Mycelia Kernel](https://github.com/lesfleursdelanuitdev/mycelia-kernel). It provides:
+Mycelia Plugin System is a **framework-agnostic**, standalone plugin architecture extracted from [Mycelia Kernel](https://github.com/lesfleursdelanuitdev/mycelia-kernel). It provides:
 
+- **Framework-agnostic** - Write domain logic once, use it with React, Vue, or any framework. Plugins are completely independent of UI frameworks
 - **Hook-based composition** - Extend systems without modification
 - **Dependency resolution** - Automatic topological sorting
 - **Transaction safety** - Atomic installation with rollback
@@ -14,8 +15,20 @@ Mycelia Plugin System is a standalone plugin architecture extracted from [Myceli
 - **Facet contracts** - Runtime validation of plugin interfaces
 - **Standalone mode** - Works without message system or other dependencies
 - **Built-in hooks** - Ships with `useListeners` for event-driven architectures (see [Simple Event System Example](#simple-event-system-example)), plus `useQueue` and `useSpeak`
+- **Framework bindings** - Official bindings for [React](#react-bindings), [Vue 3](#vue-bindings), and [Svelte](#svelte-bindings) with more coming soon
 
 **Facets** are the concrete runtime capabilities produced by hooks and attached to the system.
+
+### Framework Integration
+
+The system is designed to be framework-agnostic. Your domain logic lives in Mycelia plugins, which can be used with any framework:
+
+- **React** - Use `MyceliaProvider` and React hooks (`useFacet`, `useListener`)
+- **Vue 3** - Use `MyceliaPlugin` and Vue composables (`useFacet`, `useListener`)
+- **Svelte** - Use `setMyceliaSystem` and Svelte stores (`useFacet`, `useListener`)
+- **Vanilla JS/Node.js** - Use the system directly without any framework bindings
+
+See the [React Todo App](./examples/react-todo/README.md), [Vue Todo App](./examples/vue-todo/README.md), and [Svelte Todo App](./examples/svelte-todo/README.md) examples - they all use the **exact same plugin code**, demonstrating true framework independence.
 
 ## Quick Start
 
@@ -285,7 +298,9 @@ Comprehensive documentation is available in the [`docs/`](./docs/) directory:
 - **[Getting Started Guide](./docs/getting-started/README.md)** - Quick start with examples
 - **[Hooks and Facets Overview](./docs/core-concepts/HOOKS-AND-FACETS-OVERVIEW.md)** - Core concepts
 - **[Built-in Hooks](./docs/hooks/README.md)** - Documentation for `useListeners`, `useQueue`, and `useSpeak`
-- **[React Bindings](./docs/react/README.md)** - React integration utilities
+- **[React Bindings](./docs/react/README.md)** - React integration utilities (`MyceliaProvider`, `useFacet`, `useListener`)
+- **[Vue Bindings](./docs/vue/README.md)** - Vue 3 integration utilities (`MyceliaPlugin`, `useFacet`, `useListener`) ⭐
+- **[Svelte Bindings](./docs/svelte/README.md)** - Svelte integration utilities (`setMyceliaSystem`, `useFacet`, `useListener`) ⭐
 - **[Standalone Plugin System](./docs/standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete usage guide
 - **[Documentation Index](./docs/README.md)** - Full documentation index
 
@@ -298,10 +313,27 @@ See the `examples/` directory for:
 - Contract validation
 - Hot reloading
 - useBase fluent API
+
+### Framework Integration Examples
+
 - **[React Todo App](./examples/react-todo/README.md)** – A real-world example showing:
   - Domain logic as a Mycelia facet (`useTodos` hook)
   - Event-driven state synchronization (`todos:changed` events)
   - React bindings (`MyceliaProvider`, `useFacet`, `useListener`)
+
+- **[Vue Todo App](./examples/vue-todo/README.md)** ⭐ – A complete Vue 3 example demonstrating:
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as the React example
+  - Event-driven state synchronization (`todos:changed` events)
+  - Vue 3 bindings (`MyceliaPlugin`, `useFacet`, `useListener`)
+  - Composition API integration with reactive state management
+
+- **[Svelte Todo App](./examples/svelte-todo/README.md)** ⭐ – A complete Svelte example demonstrating:
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as React and Vue examples
+  - Event-driven state synchronization (`todos:changed` events)
+  - Svelte bindings (`setMyceliaSystem`, `useFacet`, `useListener`)
+  - Store-based reactivity with automatic subscription
+
+All three examples use the **exact same Mycelia plugin code** from `examples/todo-shared/`, proving that plugins are truly framework-independent. Write your domain logic once, use it everywhere!
 
 ## CLI Tool
 

@@ -6,14 +6,14 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { buildTodoSystem } from './src/mycelia/system.builder.js';
+import { buildTodoSystem } from '../todo-shared/src/system.builder.js';
 
 describe('React Todo App - Mycelia System', () => {
   let system;
 
   beforeEach(async () => {
     // Build the system before each test
-    system = await buildTodoSystem();
+    system = await buildTodoSystem('react-todo-app');
     
     // Enable listeners for event testing
     if (system.listeners) {
