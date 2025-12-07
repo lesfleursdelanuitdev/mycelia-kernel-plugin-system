@@ -346,14 +346,24 @@ npx mycelia-kernel-plugin create hook database
 # Create a new contract
 npx mycelia-kernel-plugin create contract database
 
-# Initialize a new project
+# Initialize a new project (vanilla JS)
 npx mycelia-kernel-plugin init my-app
+
+# Initialize a React project with Mycelia bindings
+npx mycelia-kernel-plugin init react my-react-app
+
+# Initialize a Vue 3 project with Mycelia bindings
+npx mycelia-kernel-plugin init vue my-vue-app
+
+# Initialize a Svelte project with Mycelia bindings
+npx mycelia-kernel-plugin init svelte my-svelte-app
 ```
 
 Or install globally:
 ```bash
 npm install -g mycelia-kernel-plugin
 mycelia-kernel-plugin create hook database
+mycelia-kernel-plugin init react my-react-app
 ```
 
 ## Testing

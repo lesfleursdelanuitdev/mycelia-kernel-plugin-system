@@ -62,8 +62,22 @@ function handleCreate(args) {
  * Handle 'init' command
  */
 function handleInit(args) {
-  const projectName = args[0] || 'my-plugin-system';
-  initProject(projectName);
+  if (args.length === 0) {
+    const projectName = 'my-plugin-system';
+    initProject(projectName);
+  } else if (args[0] === 'react') {
+    const projectName = args[1] || 'my-react-app';
+    initReactProject(projectName);
+  } else if (args[0] === 'vue') {
+    const projectName = args[1] || 'my-vue-app';
+    initVueProject(projectName);
+  } else if (args[0] === 'svelte') {
+    const projectName = args[1] || 'my-svelte-app';
+    initSvelteProject(projectName);
+  } else {
+    const projectName = args[0];
+    initProject(projectName);
+  }
 }
 
 /**
@@ -369,6 +383,491 @@ main().catch(console.error);
 }
 
 /**
+ * Initialize a React project with Mycelia bindings
+ */
+function initReactProject(projectName) {
+  const projectDir = projectName;
+  
+  if (existsSync(projectDir)) {
+    console.error(`Error: Directory already exists: ${projectDir}`);
+    process.exit(1);
+  }
+
+  console.log(`Creating React project: ${projectName}...`);
+
+  // Create directory structure
+  mkdirSync(projectDir, { recursive: true });
+  mkdirSync(join(projectDir, 'src'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/hooks'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/components'), { recursive: true });
+
+  // Create package.json
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    type: 'module',
+    scripts: {
+      dev: 'vite',
+      build: 'vite build',
+      preview: 'vite preview'
+    },
+    dependencies: {
+      'mycelia-kernel-plugin': '^1.2.0',
+      'react': '^18.2.0',
+      'react-dom': '^18.2.0'
+    },
+    devDependencies: {
+      '@vitejs/plugin-react': '^4.2.0',
+      'vite': '^5.0.0'
+    }
+  };
+
+  writeFileSync(
+    join(projectDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2),
+    'utf8'
+  );
+
+  // Create vite.config.js
+  const viteConfig = `import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+});
+`;
+
+  writeFileSync(join(projectDir, 'vite.config.js'), viteConfig, 'utf8');
+
+  // Create index.html
+  const indexHtml = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${projectName}</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+`;
+
+  writeFileSync(join(projectDir, 'index.html'), indexHtml, 'utf8');
+
+  // Create main.jsx
+  const mainJsx = `import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { MyceliaProvider } from 'mycelia-kernel-plugin/react';
+import { useBase } from 'mycelia-kernel-plugin';
+import App from './App.jsx';
+
+const buildSystem = () =>
+  useBase('${projectName}')
+    .build();
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <MyceliaProvider build={buildSystem}>
+      <App />
+    </MyceliaProvider>
+  </React.StrictMode>
+);
+`;
+
+  writeFileSync(join(projectDir, 'src/main.jsx'), mainJsx, 'utf8');
+
+  // Create App.jsx
+  const appJsx = `import React from 'react';
+import { useMycelia } from 'mycelia-kernel-plugin/react';
+
+function App() {
+  const system = useMycelia();
+  
+  return (
+    <div>
+      <h1>${projectName}</h1>
+      <p>System: {system?.name}</p>
+    </div>
+  );
+}
+
+export default App;
+`;
+
+  writeFileSync(join(projectDir, 'src/App.jsx'), appJsx, 'utf8');
+
+  // Create README.md
+  const readme = `# ${projectName}
+
+A React application built with Mycelia Plugin System.
+
+## Getting Started
+
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
+
+## Creating Plugins
+
+Use the CLI to scaffold new plugins:
+
+\`\`\`bash
+npx mycelia-kernel-plugin create hook my-plugin
+\`\`\`
+
+## Structure
+
+- \`src/hooks/\` - Plugin hooks
+- \`src/components/\` - React components
+- \`src/App.jsx\` - Main app component
+- \`src/main.jsx\` - Entry point
+`;
+
+  writeFileSync(join(projectDir, 'README.md'), readme, 'utf8');
+
+  // Create .gitignore
+  const gitignore = `node_modules/
+dist/
+*.log
+.DS_Store
+`;
+
+  writeFileSync(join(projectDir, '.gitignore'), gitignore, 'utf8');
+
+  console.log(`✅ React project created: ${projectDir}`);
+  console.log(`\nNext steps:`);
+  console.log(`  cd ${projectDir}`);
+  console.log(`  npm install`);
+  console.log(`  npm run dev`);
+}
+
+/**
+ * Initialize a Vue project with Mycelia bindings
+ */
+function initVueProject(projectName) {
+  const projectDir = projectName;
+  
+  if (existsSync(projectDir)) {
+    console.error(`Error: Directory already exists: ${projectDir}`);
+    process.exit(1);
+  }
+
+  console.log(`Creating Vue project: ${projectName}...`);
+
+  // Create directory structure
+  mkdirSync(projectDir, { recursive: true });
+  mkdirSync(join(projectDir, 'src'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/hooks'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/components'), { recursive: true });
+
+  // Create package.json
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    type: 'module',
+    scripts: {
+      dev: 'vite',
+      build: 'vite build',
+      preview: 'vite preview'
+    },
+    dependencies: {
+      'mycelia-kernel-plugin': '^1.2.0',
+      'vue': '^3.4.0'
+    },
+    devDependencies: {
+      '@vitejs/plugin-vue': '^5.0.0',
+      'vite': '^5.0.0'
+    }
+  };
+
+  writeFileSync(
+    join(projectDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2),
+    'utf8'
+  );
+
+  // Create vite.config.js
+  const viteConfig = `import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+
+export default defineConfig({
+  plugins: [vue()],
+});
+`;
+
+  writeFileSync(join(projectDir, 'vite.config.js'), viteConfig, 'utf8');
+
+  // Create index.html
+  const indexHtml = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${projectName}</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+`;
+
+  writeFileSync(join(projectDir, 'index.html'), indexHtml, 'utf8');
+
+  // Create main.js
+  const mainJs = `import { createApp } from 'vue';
+import { MyceliaPlugin } from 'mycelia-kernel-plugin/vue';
+import { useBase } from 'mycelia-kernel-plugin';
+import App from './App.vue';
+
+const buildSystem = () =>
+  useBase('${projectName}')
+    .build();
+
+const app = createApp(App);
+app.use(MyceliaPlugin, { build: buildSystem });
+app.mount('#app');
+`;
+
+  writeFileSync(join(projectDir, 'src/main.js'), mainJs, 'utf8');
+
+  // Create App.vue
+  const appVue = `<template>
+  <div>
+    <h1>${projectName}</h1>
+    <p>System: {{ system?.name }}</p>
+  </div>
+</template>
+
+<script setup>
+import { useMycelia } from 'mycelia-kernel-plugin/vue';
+
+const system = useMycelia();
+</script>
+`;
+
+  writeFileSync(join(projectDir, 'src/App.vue'), appVue, 'utf8');
+
+  // Create README.md
+  const readme = `# ${projectName}
+
+A Vue 3 application built with Mycelia Plugin System.
+
+## Getting Started
+
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
+
+## Creating Plugins
+
+Use the CLI to scaffold new plugins:
+
+\`\`\`bash
+npx mycelia-kernel-plugin create hook my-plugin
+\`\`\`
+
+## Structure
+
+- \`src/hooks/\` - Plugin hooks
+- \`src/components/\` - Vue components
+- \`src/App.vue\` - Main app component
+- \`src/main.js\` - Entry point
+`;
+
+  writeFileSync(join(projectDir, 'README.md'), readme, 'utf8');
+
+  // Create .gitignore
+  const gitignore = `node_modules/
+dist/
+*.log
+.DS_Store
+`;
+
+  writeFileSync(join(projectDir, '.gitignore'), gitignore, 'utf8');
+
+  console.log(`✅ Vue project created: ${projectDir}`);
+  console.log(`\nNext steps:`);
+  console.log(`  cd ${projectDir}`);
+  console.log(`  npm install`);
+  console.log(`  npm run dev`);
+}
+
+/**
+ * Initialize a Svelte project with Mycelia bindings
+ */
+function initSvelteProject(projectName) {
+  const projectDir = projectName;
+  
+  if (existsSync(projectDir)) {
+    console.error(`Error: Directory already exists: ${projectDir}`);
+    process.exit(1);
+  }
+
+  console.log(`Creating Svelte project: ${projectName}...`);
+
+  // Create directory structure
+  mkdirSync(projectDir, { recursive: true });
+  mkdirSync(join(projectDir, 'src'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/hooks'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/components'), { recursive: true });
+
+  // Create package.json
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    type: 'module',
+    scripts: {
+      dev: 'vite dev',
+      build: 'vite build',
+      preview: 'vite preview'
+    },
+    dependencies: {
+      'mycelia-kernel-plugin': '^1.2.0',
+      'svelte': '^4.2.0'
+    },
+    devDependencies: {
+      '@sveltejs/vite-plugin-svelte': '^3.0.0',
+      'vite': '^5.0.0'
+    }
+  };
+
+  writeFileSync(
+    join(projectDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2),
+    'utf8'
+  );
+
+  // Create vite.config.js
+  const viteConfig = `import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+
+export default defineConfig({
+  plugins: [svelte()],
+});
+`;
+
+  writeFileSync(join(projectDir, 'vite.config.js'), viteConfig, 'utf8');
+
+  // Create svelte.config.js
+  const svelteConfig = `import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+export default {
+  preprocess: vitePreprocess(),
+};
+`;
+
+  writeFileSync(join(projectDir, 'svelte.config.js'), svelteConfig, 'utf8');
+
+  // Create index.html
+  const indexHtml = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${projectName}</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+`;
+
+  writeFileSync(join(projectDir, 'index.html'), indexHtml, 'utf8');
+
+  // Create main.js
+  const mainJs = `import App from './App.svelte';
+
+const app = new App({
+  target: document.getElementById('app'),
+});
+
+export default app;
+`;
+
+  writeFileSync(join(projectDir, 'src/main.js'), mainJs, 'utf8');
+
+  // Create App.svelte
+  const appSvelte = `<script>
+  import { onMount } from 'svelte';
+  import { setMyceliaSystem, useMycelia } from 'mycelia-kernel-plugin/svelte';
+  import { useBase } from 'mycelia-kernel-plugin';
+  
+  let system;
+  
+  onMount(async () => {
+    system = await useBase('${projectName}').build();
+    setMyceliaSystem(system);
+  });
+  
+  const systemStore = useMycelia();
+  $: currentSystem = $systemStore;
+</script>
+
+<div>
+  <h1>${projectName}</h1>
+  {#if currentSystem}
+    <p>System: {currentSystem.name}</p>
+  {:else}
+    <p>Loading system...</p>
+  {/if}
+</div>
+`;
+
+  writeFileSync(join(projectDir, 'src/App.svelte'), appSvelte, 'utf8');
+
+  // Create README.md
+  const readme = `# ${projectName}
+
+A Svelte application built with Mycelia Plugin System.
+
+## Getting Started
+
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
+
+## Creating Plugins
+
+Use the CLI to scaffold new plugins:
+
+\`\`\`bash
+npx mycelia-kernel-plugin create hook my-plugin
+\`\`\`
+
+## Structure
+
+- \`src/hooks/\` - Plugin hooks
+- \`src/components/\` - Svelte components
+- \`src/App.svelte\` - Main app component
+- \`src/main.js\` - Entry point
+`;
+
+  writeFileSync(join(projectDir, 'README.md'), readme, 'utf8');
+
+  // Create .gitignore
+  const gitignore = `node_modules/
+dist/
+*.log
+.DS_Store
+`;
+
+  writeFileSync(join(projectDir, '.gitignore'), gitignore, 'utf8');
+
+  console.log(`✅ Svelte project created: ${projectDir}`);
+  console.log(`\nNext steps:`);
+  console.log(`  cd ${projectDir}`);
+  console.log(`  npm install`);
+  console.log(`  npm run dev`);
+}
+
+/**
  * Show help message
  */
 function showHelp() {
@@ -381,13 +880,19 @@ Usage:
 Commands:
   create hook <name>      Create a new hook file
   create contract <name>  Create a new contract file
-  init [name]             Initialize a new project
+  init [name]             Initialize a new project (vanilla JS)
+  init react [name]       Initialize a React project with Mycelia bindings
+  init vue [name]         Initialize a Vue 3 project with Mycelia bindings
+  init svelte [name]      Initialize a Svelte project with Mycelia bindings
   help                    Show this help message
 
 Examples:
   mycelia-kernel-plugin create hook database
   mycelia-kernel-plugin create contract database
   mycelia-kernel-plugin init my-app
+  mycelia-kernel-plugin init react my-react-app
+  mycelia-kernel-plugin init vue my-vue-app
+  mycelia-kernel-plugin init svelte my-svelte-app
 
 For more information, visit:
   https://github.com/lesfleursdelanuitdev/mycelia-kernel-plugin-system
