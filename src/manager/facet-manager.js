@@ -1,5 +1,6 @@
 import { FacetManagerTransaction } from './facet-manager-transaction.js';
 import { createSubsystemLogger } from '../utils/logger.js';
+import { instrumentFacetInit, instrumentDisposeCallback } from '../utils/instrumentation.js';
 
 export class FacetManager {
   #facets = new Map(); // Map<kind, Array<facet>> - stores arrays of facets per kind, sorted by orderIndex
@@ -78,10 +79,11 @@ export class FacetManager {
     this.#txn.trackAddition(kind);
 
     // 2) Init now
-    try {
-      if (opts.init && typeof facet.init === 'function') {
-        await facet.init(opts.ctx, opts.api, this.#subsystem);
-      }
+          try {
+            if (opts.init && typeof facet.init === 'function') {
+              // Use instrumentation for timing (handles init callback internally)
+              await instrumentFacetInit(facet, opts.ctx, opts.api, this.#subsystem);
+            }
     } catch (err) {
       // local rollback for this facet
       try { facet?.dispose?.(this.#subsystem); } catch { /* best-effort disposal */ }
@@ -546,14 +548,20 @@ export class FacetManager {
       if (Array.isArray(facets)) {
         for (const facet of facets) {
           if (typeof facet.dispose === 'function') {
-            try { await facet.dispose(subsystem); }
+            try { 
+              // facet.dispose() will handle instrumentation internally
+              await facet.dispose(subsystem);
+            }
             catch (e) { errors.push({ kind, error: e }); }
           }
         }
       } else {
         // Legacy: single facet
         if (typeof facets.dispose === 'function') {
-          try { await facets.dispose(subsystem); }
+          try { 
+            // facet.dispose() will handle instrumentation internally
+            await facets.dispose(subsystem);
+          }
           catch (e) { errors.push({ kind, error: e }); }
         }
       }

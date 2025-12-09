@@ -1,4 +1,5 @@
 import { getDefaultVersion, isValidSemver } from '../utils/semver.js';
+import { instrumentFacetInit, instrumentDisposeCallback } from '../utils/instrumentation.js';
 
 export class Facet {
   #kind;
@@ -121,15 +122,27 @@ export class Facet {
 
   async init(ctx, api, subsystem) {
     if (this.#isInit) return;
-    if (this.#initCallback) {
+    
+    // Use instrumentation if available and enabled, otherwise call callback directly
+    if (subsystem && typeof instrumentFacetInit === 'function') {
+      // Instrumentation will handle timing and call the callback
+      await instrumentFacetInit(this, ctx, api, subsystem, this.#initCallback);
+    } else if (this.#initCallback) {
+      // No instrumentation - call callback directly
       await this.#initCallback({ ctx, api, subsystem, facet: this });
     }
+    
     this.#isInit = true;
     Object.freeze(this);
   }
 
-  async dispose() {
-    if (this.#disposeCallback) {
+  async dispose(subsystem) {
+    // Use instrumentation if available and enabled, otherwise call callback directly
+    if (subsystem && this.#disposeCallback && typeof instrumentDisposeCallback === 'function') {
+      // Instrumentation will handle timing and call the callback
+      await instrumentDisposeCallback(this, subsystem, this.#disposeCallback);
+    } else if (this.#disposeCallback) {
+      // No instrumentation - call callback directly
       await this.#disposeCallback(this);
     }
   }

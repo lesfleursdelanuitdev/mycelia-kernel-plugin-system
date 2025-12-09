@@ -40,6 +40,13 @@ export { getDebugFlag } from './utils/debug-flag.js';
 export { findFacet } from './utils/find-facet.js';
 export { useBase } from './utils/use-base.js';
 export { 
+  isInstrumentationEnabled,
+  instrumentHookExecution,
+  instrumentFacetInit,
+  instrumentDisposeCallback,
+  instrumentBuildPhase
+} from './utils/instrumentation.js';
+export { 
   parseVersion, 
   isValidSemver, 
   compareVersions, 
