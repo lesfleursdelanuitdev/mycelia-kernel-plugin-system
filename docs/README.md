@@ -19,6 +19,9 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 ### Standalone Plugin System
 - **[Standalone Plugin System](./standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete guide to using the system standalone
 
+### Utilities
+- **[useBase](./utils/USE-BASE.md)** - Fluent API builder for creating and configuring systems
+
 ### Built-in Hooks
 - **[Built-in Hooks Overview](./hooks/README.md)** - Overview of available hooks
 - **[useListeners](./hooks/USE-LISTENERS.md)** - Event-driven listener management
@@ -48,6 +51,22 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **[Queue Helpers](./svelte/QUEUE-HELPERS.md)** - Queue management utilities
 - **[Builder Helpers](./svelte/BUILDER-HELPERS.md)** - System builder utilities
 - **[Store Generator](./svelte/STORE-GENERATOR.md)** - Custom store generation
+
+### Angular Bindings
+- **[Angular Bindings Overview](./angular/README.md)** - Angular integration guide
+- **[Core Bindings](./angular/CORE-BINDINGS.md)** - Service factory and basic utilities
+- **[Listener Helpers](./angular/LISTENER-HELPERS.md)** - Event listener utilities
+- **[Queue Helpers](./angular/QUEUE-HELPERS.md)** - Queue management utilities
+- **[Builder Helpers](./angular/BUILDER-HELPERS.md)** - System builder utilities
+- **[Service Generator](./angular/SERVICE-GENERATOR.md)** - Custom service generation
+
+### Qwik Bindings
+- **[Qwik Bindings Overview](./qwik/README.md)** - Qwik integration guide
+- **[Core Bindings](./qwik/CORE-BINDINGS.md)** - Provider and basic hooks
+- **[Listener Helpers](./qwik/LISTENER-HELPERS.md)** - Event listener utilities
+- **[Queue Helpers](./qwik/QUEUE-HELPERS.md)** - Queue management utilities
+- **[Builder Helpers](./qwik/BUILDER-HELPERS.md)** - System builder utilities
+- **[Signal Generator](./qwik/SIGNAL-GENERATOR.md)** - Custom signal generation
 
 ### Facet Contracts
 - **[Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)** - Contract system overview
@@ -96,6 +115,8 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - **Use with React** → [React Bindings Overview](./react/README.md)
 - **Use with Vue** → [Vue Bindings Overview](./vue/README.md)
 - **Use with Svelte** → [Svelte Bindings Overview](./svelte/README.md)
+- **Use with Angular** → [Angular Bindings Overview](./angular/README.md)
+- **Use with Qwik** → [Qwik Bindings Overview](./qwik/README.md)
 - **Learn about contracts** → [Facet Contracts Overview](./facet-contracts/FACET-CONTRACTS-OVERVIEW.md)
 - **See examples** → [Examples](./examples/README.md)
 - **Follow a guide** → [Creating Plugins](./guides/creating-plugins.md)
@@ -126,6 +147,8 @@ Welcome to the Mycelia Plugin System documentation! This documentation covers al
 - React Bindings Documentation
 - Vue Bindings Documentation
 - Svelte Bindings Documentation
+- Angular Bindings Documentation
+- Qwik Bindings Documentation
 - Facets Documentation
 - Facet Manager Documentation
 - Facet Manager Transaction Documentation

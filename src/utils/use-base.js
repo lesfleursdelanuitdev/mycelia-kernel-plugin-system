@@ -71,7 +71,7 @@ class UseBaseBuilder {
   /**
    * Set the base class for the system
    * 
-   * @param {Function} BaseClass - The base class to use (StandalonePluginSystem or BaseSubsystem)
+   * @param {Function} BaseClass - The base class to use. Must be BaseSubsystem or any class that extends BaseSubsystem
    * @returns {UseBaseBuilder} This builder for chaining
    * 
    * @example

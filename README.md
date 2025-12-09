@@ -1,6 +1,6 @@
 # Mycelia Plugin System
 
-A sophisticated, **framework-agnostic** plugin system with transaction safety, lifecycle management, and official bindings for React and Vue 3.
+A sophisticated, **framework-agnostic** plugin system with transaction safety, lifecycle management, and official bindings for React, Vue 3, Svelte, Angular, and Qwik.
 
 ## Overview
 
@@ -15,7 +15,7 @@ Mycelia Plugin System is a **framework-agnostic**, standalone plugin architectur
 - **Facet contracts** - Runtime validation of plugin interfaces
 - **Standalone mode** - Works without message system or other dependencies
 - **Built-in hooks** - Ships with `useListeners` for event-driven architectures (see [Simple Event System Example](#simple-event-system-example)), plus `useQueue` and `useSpeak`
-- **Framework bindings** - Official bindings for [React](#react-bindings), [Vue 3](#vue-bindings), and [Svelte](#svelte-bindings) with more coming soon
+- **Framework bindings** - Official bindings for [React](#react-bindings), [Vue 3](#vue-bindings), [Svelte](#svelte-bindings), [Angular](#angular-bindings), and [Qwik](#qwik-bindings)
 
 **Facets** are the concrete runtime capabilities produced by hooks and attached to the system.
 
@@ -26,6 +26,8 @@ The system is designed to be framework-agnostic. Your domain logic lives in Myce
 - **React** - Use `MyceliaProvider` and React hooks (`useFacet`, `useListener`)
 - **Vue 3** - Use `MyceliaPlugin` and Vue composables (`useFacet`, `useListener`)
 - **Svelte** - Use `setMyceliaSystem` and Svelte stores (`useFacet`, `useListener`)
+- **Angular** - Use `MyceliaService` and RxJS observables (`useFacet`, `useListener`)
+- **Qwik** - Use `MyceliaProvider` and Qwik signals (`useFacet`, `useListener`)
 - **Vanilla JS/Node.js** - Use the system directly without any framework bindings
 
 See the [React Todo App](./examples/react-todo/README.md), [Vue Todo App](./examples/vue-todo/README.md), and [Svelte Todo App](./examples/svelte-todo/README.md) examples - they all use the **exact same plugin code**, demonstrating true framework independence.
@@ -73,6 +75,15 @@ const useDatabase = createHook({
 const system = await useBase('my-app')
   .config('database', { host: 'localhost' })
   .use(useDatabase)
+  .build();
+
+// Or configure multiple facets and hooks at once
+const system = await useBase('my-app')
+  .configMultiple({
+    database: { host: 'localhost', port: 5432 },
+    cache: { ttl: 3600 }
+  })
+  .useMultiple([useDatabase, useCache])
   .build();
 
 // Use the plugin
@@ -284,7 +295,7 @@ StandalonePluginSystem
 
 - **`createHook()`** - Create a plugin hook
 - **`createFacetContract()`** - Create a facet contract
-- **`useBase()`** - Fluent API builder for StandalonePluginSystem
+- **`useBase()`** - Fluent API builder for StandalonePluginSystem (see [useBase Documentation](./docs/utils/USE-BASE.md))
 
 ### Utilities
 
@@ -295,12 +306,19 @@ StandalonePluginSystem
 
 Comprehensive documentation is available in the [`docs/`](./docs/) directory:
 
+### Quick Links
+- **[useBase Guide](./docs/utils/USE-BASE.md)** - Complete guide to the fluent API builder with all methods
+- **[Instrumentation](./docs/instrumentation.md)** - Debugging and performance instrumentation
+
+### Full Documentation
 - **[Getting Started Guide](./docs/getting-started/README.md)** - Quick start with examples
 - **[Hooks and Facets Overview](./docs/core-concepts/HOOKS-AND-FACETS-OVERVIEW.md)** - Core concepts
 - **[Built-in Hooks](./docs/hooks/README.md)** - Documentation for `useListeners`, `useQueue`, and `useSpeak`
 - **[React Bindings](./docs/react/README.md)** - React integration utilities (`MyceliaProvider`, `useFacet`, `useListener`)
 - **[Vue Bindings](./docs/vue/README.md)** - Vue 3 integration utilities (`MyceliaPlugin`, `useFacet`, `useListener`) ⭐
 - **[Svelte Bindings](./docs/svelte/README.md)** - Svelte integration utilities (`setMyceliaSystem`, `useFacet`, `useListener`) ⭐
+- **[Angular Bindings](./docs/angular/README.md)** - Angular integration utilities (`MyceliaService`, `useFacet`, `useListener`) ⭐
+- **[Qwik Bindings](./docs/qwik/README.md)** - Qwik integration utilities (`MyceliaProvider`, `useFacet`, `useListener`) ⭐
 - **[Standalone Plugin System](./docs/standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete usage guide
 - **[Documentation Index](./docs/README.md)** - Full documentation index
 
@@ -333,7 +351,19 @@ See the `examples/` directory for:
   - Svelte bindings (`setMyceliaSystem`, `useFacet`, `useListener`)
   - Store-based reactivity with automatic subscription
 
-All three examples use the **exact same Mycelia plugin code** from `examples/todo-shared/`, proving that plugins are truly framework-independent. Write your domain logic once, use it everywhere!
+- **[Angular Todo App](./examples/angular-todo/README.md)** ⭐ – A complete Angular example demonstrating:
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, and Svelte examples
+  - Event-driven state synchronization (`todos:changed` events)
+  - Angular bindings (`MyceliaService`, `useFacet`, `useListener`)
+  - RxJS observables for reactive state management
+
+- **[Qwik Todo App](./examples/qwik-todo/README.md)** ⭐ – A complete Qwik example demonstrating:
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as all other framework examples
+  - Event-driven state synchronization (`todos:changed` events)
+  - Qwik bindings (`MyceliaProvider`, `useFacet`, `useListener`)
+  - Qwik signals for reactive state management
+
+All five examples use the **exact same Mycelia plugin code** from `examples/todo-shared/`, proving that plugins are truly framework-independent. Write your domain logic once, use it everywhere!
 
 ## CLI Tool
 
@@ -357,6 +387,12 @@ npx mycelia-kernel-plugin init vue my-vue-app
 
 # Initialize a Svelte project with Mycelia bindings
 npx mycelia-kernel-plugin init svelte my-svelte-app
+
+# Initialize an Angular project with Mycelia bindings
+npx mycelia-kernel-plugin init angular my-angular-app
+
+# Initialize a Qwik project with Mycelia bindings
+npx mycelia-kernel-plugin init qwik my-qwik-app
 ```
 
 Or install globally:
