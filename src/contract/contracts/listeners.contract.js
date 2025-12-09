@@ -19,6 +19,7 @@ import { createFacetContract } from '../facet-contract.js';
  * Required methods:
  * - on: Register a listener for a specific message path
  * - off: Unregister a listener for a specific message path
+ * - emit: Emit an event to listeners for a specific path
  * - hasListeners: Check if listeners are enabled
  * - enableListeners: Enable listeners and initialize ListenerManager
  * - disableListeners: Disable listeners (but keep manager instance)
@@ -37,6 +38,7 @@ export const listenersContract = createFacetContract({
   requiredMethods: [
     'on',
     'off',
+    'emit',
     'hasListeners',
     'enableListeners',
     'disableListeners'

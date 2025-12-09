@@ -320,6 +320,7 @@ Comprehensive documentation is available in the [`docs/`](./docs/) directory:
 - **[Svelte Bindings](./docs/svelte/README.md)** - Svelte integration utilities (`setMyceliaSystem`, `useFacet`, `useListener`) ⭐
 - **[Angular Bindings](./docs/angular/README.md)** - Angular integration utilities (`MyceliaService`, `useFacet`, `useListener`) ⭐
 - **[Qwik Bindings](./docs/qwik/README.md)** - Qwik integration utilities (`MyceliaProvider`, `useFacet`, `useListener`) ⭐
+- **[Solid.js Bindings](./src/solid/README.md)** - Solid.js integration utilities (`MyceliaProvider`, `useFacet`, `useListener`) ⭐
 - **[Standalone Plugin System](./docs/standalone/STANDALONE-PLUGIN-SYSTEM.md)** - Complete usage guide
 - **[Documentation Index](./docs/README.md)** - Full documentation index
 
@@ -347,14 +348,13 @@ See the `examples/` directory for:
   - Composition API integration with reactive state management
 
 - **[Svelte Todo App](./examples/svelte-todo/README.md)** ⭐ – A complete Svelte example demonstrating:
-- **[Solid.js Todo App](./examples/solid-todo/README.md)** ⭐ – A complete Solid.js example demonstrating:
-  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, and Svelte examples
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, and other examples
   - Event-driven state synchronization (`todos:changed` events)
-  - Solid.js bindings (`MyceliaProvider`, `useFacet`, `useListener`)
-  - Signal-based reactivity with automatic updates
+  - Svelte bindings (`setMyceliaSystem`, `useFacet`, `useListener`)
+  - Svelte stores for reactive state management
 
 - **[Angular Todo App](./examples/angular-todo/README.md)** ⭐ – A complete Angular example demonstrating:
-  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, and Svelte examples
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, Svelte, and other examples
   - Event-driven state synchronization (`todos:changed` events)
   - Angular bindings (`MyceliaService`, `useFacet`, `useListener`)
   - RxJS observables for reactive state management
@@ -364,6 +364,12 @@ See the `examples/` directory for:
   - Event-driven state synchronization (`todos:changed` events)
   - Qwik bindings (`MyceliaProvider`, `useFacet`, `useListener`)
   - Qwik signals for reactive state management
+
+- **[Solid.js Todo App](./examples/solid-todo/README.md)** ⭐ – A complete Solid.js example demonstrating:
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, Svelte, Angular, and Qwik examples
+  - Event-driven state synchronization (`todos:changed` events)
+  - Solid.js bindings (`MyceliaProvider`, `useFacet`, `useListener`)
+  - Signal-based reactivity with automatic updates
 
 All six examples use the **exact same Mycelia plugin code** from `examples/todo-shared/`, proving that plugins are truly framework-independent. Write your domain logic once, use it everywhere!
 

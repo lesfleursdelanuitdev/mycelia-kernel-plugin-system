@@ -31,6 +31,7 @@ export * from './contract/contracts/index.js';
 
 // Hook exports
 export { useListeners } from './hooks/listeners/use-listeners.js';
+export { useSimpleListeners } from './hooks/listeners/use-simple-listeners.js';
 export { useQueue } from './hooks/queue/use-queue.js';
 export { useSpeak } from './hooks/speak/use-speak.js';
 

@@ -57,13 +57,13 @@
     "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "vue": ">=3.0.0",
-    "svelte": ">=3.0.0",
     "@angular/core": ">=15.0.0",
     "@builder.io/qwik": ">=1.0.0",
+    "react": ">=16.8.0",
+    "rxjs": ">=7.0.0",
     "solid-js": ">=1.0.0",
-    "rxjs": ">=7.0.0"
+    "svelte": ">=3.0.0",
+    "vue": ">=3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -73,5 +73,8 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "mitt": "^3.0.1"
   }
 }
