@@ -1,6 +1,6 @@
 # useBase - Fluent API Builder
 
-The `useBase` function provides a convenient, chainable API for creating and configuring plugin system instances. By default, it creates `StandalonePluginSystem` instances, but you can use `setBase()` to use `BaseSubsystem` or any custom class that extends `BaseSubsystem`.
+The `useBase` function provides a convenient, chainable API for creating and configuring `StandalonePluginSystem` or `BaseSubsystem` instances.
 
 ## Overview
 
@@ -11,7 +11,7 @@ The `useBase` function provides a convenient, chainable API for creating and con
 - **Configuration management** - Easy configuration of multiple facets
 - **Hook registration** - Register single or multiple hooks
 - **Conditional registration** - Register hooks based on conditions
-- **Base class selection** - Choose any class that extends `BaseSubsystem` (including `BaseSubsystem` itself or `StandalonePluginSystem`)
+- **Base class selection** - Choose between `StandalonePluginSystem` and `BaseSubsystem`
 
 ## Quick Start
 
@@ -226,7 +226,7 @@ await useBase('my-app')
 Set the base class for the system. Must be called before any method that uses the system.
 
 **Parameters:**
-- `BaseClass` (Function, required) - The base class to use. Must be `BaseSubsystem` or any class that extends `BaseSubsystem` (e.g., `StandalonePluginSystem` or a custom subclass)
+- `BaseClass` (Function, required) - The base class to use (`StandalonePluginSystem` or `BaseSubsystem`)
 
 **Returns:** `UseBaseBuilder` - This builder for chaining
 
@@ -245,21 +245,7 @@ await useBase('my-app')
   .build();
 ```
 
-**Example with custom subclass:**
-```javascript
-import { BaseSubsystem } from 'mycelia-kernel-plugin';
-
-class MyCustomSystem extends BaseSubsystem {
-  // Custom implementation
-}
-
-await useBase('my-app')
-  .setBase(MyCustomSystem)
-  .use(useDatabase)
-  .build();
-```
-
-**Note:** By default, `useBase` uses `StandalonePluginSystem`. Only call `setBase()` if you need `BaseSubsystem` or a custom subclass that extends `BaseSubsystem`.
+**Note:** By default, `useBase` uses `StandalonePluginSystem`. Only call `setBase()` if you need `BaseSubsystem` or a custom subclass.
 
 ### Lifecycle Callbacks
 
@@ -388,30 +374,6 @@ const system = await useBase('my-app')
   .build();
 ```
 
-### Using Custom Subclass
-
-```javascript
-import { useBase, BaseSubsystem } from 'mycelia-kernel-plugin';
-
-class MyCustomSystem extends BaseSubsystem {
-  // Add custom methods or override behavior
-  customMethod() {
-    return 'custom';
-  }
-}
-
-const system = await useBase('my-app')
-  .setBase(MyCustomSystem)
-  .configMultiple({
-    database: { host: 'localhost' }
-  })
-  .use(useDatabase)
-  .build();
-
-// Now system is an instance of MyCustomSystem
-system.customMethod(); // 'custom'
-```
-
 ### Complex Example
 
 ```javascript
@@ -440,9 +402,8 @@ const system = await useBase('my-app', { debug: true })
 1. **Use `useMultiple` for related hooks** - Group related hooks together for better readability
 2. **Use `configMultiple` for initial setup** - Configure all facets at once for cleaner code
 3. **Use conditional methods for environment-specific setup** - `useIf` and `useIfMultiple` are perfect for dev/prod differences
-4. **Call `setBase()` early** - If you need a custom base class, call `setBase()` before any other methods that use the system
+4. **Call `setBase()` early** - If you need `BaseSubsystem`, call `setBase()` before any other methods
 5. **Chain methods logically** - Group related operations together (config, then hooks, then callbacks, then build)
-6. **Extend BaseSubsystem for custom behavior** - Create custom subclasses when you need additional functionality beyond what `StandalonePluginSystem` provides
 
 ## Error Handling
 

@@ -79,11 +79,11 @@ export class FacetManager {
     this.#txn.trackAddition(kind);
 
     // 2) Init now
-          try {
-            if (opts.init && typeof facet.init === 'function') {
-              // Use instrumentation for timing (handles init callback internally)
-              await instrumentFacetInit(facet, opts.ctx, opts.api, this.#subsystem);
-            }
+    try {
+      if (opts.init && typeof facet.init === 'function') {
+        // facet.init() will handle instrumentation internally
+        await facet.init(opts.ctx, opts.api, this.#subsystem);
+      }
     } catch (err) {
       // local rollback for this facet
       try { facet?.dispose?.(this.#subsystem); } catch { /* best-effort disposal */ }

@@ -3,10 +3,10 @@ import { BaseSubsystem } from '../system/base-subsystem.js';
 import { deepMerge } from '../builder/context-resolver.js';
 
 /**
- * useBase - Fluent API Builder for StandalonePluginSystem
+ * useBase - Fluent API Builder for StandalonePluginSystem / BaseSubsystem
  * 
  * Provides a convenient, chainable API for creating and configuring
- * StandalonePluginSystem instances.
+ * StandalonePluginSystem or BaseSubsystem instances via a fluent API.
  * 
  * @param {string} name - Unique name for the plugin system
  * @param {Object} [options={}] - Initial configuration options
@@ -14,6 +14,9 @@ import { deepMerge } from '../builder/context-resolver.js';
  * @param {boolean} [options.debug=false] - Enable debug logging
  * @param {Array} [options.defaultHooks=[]] - Optional default hooks to install
  * @returns {UseBaseBuilder} Builder instance with fluent API
+ * 
+ * By default it uses StandalonePluginSystem; call .setBase(BaseSubsystem)
+ * to build a subsystem instead.
  * 
  * @example
  * ```javascript

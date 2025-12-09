@@ -5,6 +5,7 @@
  */
 
 import { Facet } from '../core/facet.js';
+import { instrumentHookExecution } from '../utils/instrumentation.js';
 
 /**
  * Order hooks based on their dependencies using topological sort.
@@ -44,32 +45,39 @@ export function orderHooksByDependencies(hooks) {
   }
 
   // Build dependency graph using hook IDs
+  // This graph tracks hook-to-hook dependencies (not facet-to-facet)
+  // We need this because multiple hooks can create the same facet kind
   const hookDepGraph = new Map(); // hookId -> Set(dependent hookIds)
   const hookIndeg = new Map(); // hookId -> indegree
   
-  // Initialize graph
+  // Initialize graph: all hooks start with no dependencies
   for (const { hookId } of hookArray) {
     hookDepGraph.set(hookId, new Set());
     hookIndeg.set(hookId, 0);
   }
   
   // Add edges: if hook A requires kind X, find the hook(s) that create X
+  // This creates a dependency: "hook A must run after hook that creates X"
   for (const { hookId, kind, required, overwrite, index } of hookArray) {
     for (const depKind of required) {
       const depHookIds = kindToHookIds.get(depKind) || [];
       
       if (depHookIds.length === 0) {
         // Dependency not in our hook list (might be external or not yet created)
+        // Skip - we'll validate this later in validateHookDependencies
         continue;
       }
       
+      // Special case: overwrite hooks requiring their own kind
       // If this hook requires its own kind (overwrite scenario)
       if (depKind === kind && overwrite) {
         // Find the previous hook of this kind (the one it's overwriting)
+        // Overwrite hooks must run AFTER the hook they're replacing
         if (index > 0) {
           const previousHookId = `${kind}:${index - 1}`;
           if (hookIdMap.has(previousHookId)) {
-            // Overwrite hook depends on the previous hook of same kind
+            // Add edge: previousHook -> currentHook
+            // This ensures the overwrite hook runs after the original
             hookDepGraph.get(previousHookId).add(hookId);
             hookIndeg.set(hookId, (hookIndeg.get(hookId) || 0) + 1);
           }
@@ -79,27 +87,35 @@ export function orderHooksByDependencies(hooks) {
       
       // For other dependencies, depend on the LAST hook that creates that kind
       // (the most recent/enhanced version)
+      // This ensures hooks always depend on the final version of a facet
       if (depHookIds.length > 0) {
         const lastDepHookId = depHookIds[depHookIds.length - 1];
+        // Add edge: lastDepHook -> currentHook
         hookDepGraph.get(lastDepHookId).add(hookId);
         hookIndeg.set(hookId, (hookIndeg.get(hookId) || 0) + 1);
       }
     }
   }
   
-  // Topological sort on hook IDs
+  // Topological sort on hook IDs using Kahn's algorithm
+  // This determines the order in which hooks should be executed
   const orderedHookIds = [];
   const queue = [];
+  
+  // Step 1: Find all hooks with no dependencies (indegree = 0)
   for (const { hookId } of hookArray) {
     if (hookIndeg.get(hookId) === 0) {
       queue.push(hookId);
     }
   }
   
+  // Step 2: Process queue - remove hooks with no dependencies, add to result
   while (queue.length > 0) {
     const hookId = queue.shift();
     orderedHookIds.push(hookId);
     
+    // Step 3: For each dependent hook, decrement its indegree
+    // If indegree becomes 0, it's ready to process (add to queue)
     for (const dependent of hookDepGraph.get(hookId)) {
       const newIndeg = hookIndeg.get(dependent) - 1;
       hookIndeg.set(dependent, newIndeg);
@@ -108,6 +124,11 @@ export function orderHooksByDependencies(hooks) {
       }
     }
   }
+  
+  // Note: We don't check for cycles here because:
+  // 1. Hook-level cycles are less common (hooks are usually independent)
+  // 2. Facet-level cycles are caught in buildDepGraph/topoSort
+  // 3. If a cycle exists, orderedHookIds.length < hookArray.length
   
   // Build ordered hooks array
   const orderedHooks = [];
@@ -146,7 +167,8 @@ export function executeHooksAndCreateFacets(orderedHooks, resolvedCtx, subsystem
 
     let facet;
     try {
-      facet = hook(resolvedCtx, subsystem.api, subsystem);
+      // Instrument hook execution for timing
+      facet = instrumentHookExecution(hook, resolvedCtx, subsystem.api, subsystem);
     } catch (error) {
       throw new Error(`Hook '${hookKind}' (from ${hookSource}) failed during execution: ${error.message}`);
     }

@@ -74,6 +74,12 @@ function handleInit(args) {
   } else if (args[0] === 'svelte') {
     const projectName = args[1] || 'my-svelte-app';
     initSvelteProject(projectName);
+  } else if (args[0] === 'angular') {
+    const projectName = args[1] || 'my-angular-app';
+    initAngularProject(projectName);
+  } else if (args[0] === 'qwik') {
+    const projectName = args[1] || 'my-qwik-app';
+    initQwikProject(projectName);
   } else {
     const projectName = args[0];
     initProject(projectName);
@@ -868,6 +874,257 @@ dist/
 }
 
 /**
+ * Initialize an Angular project with Mycelia bindings
+ */
+function initAngularProject(projectName) {
+  const projectDir = projectName;
+  
+  if (existsSync(projectDir)) {
+    console.error(`Error: Directory already exists: ${projectDir}`);
+    process.exit(1);
+  }
+
+  console.log(`Creating Angular project: ${projectName}...`);
+  console.log(`\nNote: This creates a basic Angular project structure.`);
+  console.log(`You may need to run 'ng new' separately for a full Angular CLI setup.`);
+
+  // Create directory structure
+  mkdirSync(projectDir, { recursive: true });
+  mkdirSync(join(projectDir, 'src'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/app'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/app/services'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/app/components'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/mycelia'), { recursive: true });
+
+  // Create package.json
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    type: 'module',
+    scripts: {
+      start: 'ng serve',
+      build: 'ng build',
+      test: 'ng test'
+    },
+    dependencies: {
+      'mycelia-kernel-plugin': '^1.3.0',
+      '@angular/core': '^17.0.0',
+      '@angular/common': '^17.0.0',
+      'rxjs': '^7.8.0'
+    },
+    devDependencies: {
+      '@angular/cli': '^17.0.0',
+      '@angular/compiler-cli': '^17.0.0',
+      'typescript': '^5.0.0'
+    }
+  };
+
+  writeFileSync(
+    join(projectDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2),
+    'utf8'
+  );
+
+  // Create Mycelia service
+  const myceliaService = `import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { createMyceliaService } from 'mycelia-kernel-plugin/angular';
+import { buildSystem } from '../mycelia/system.builder.js';
+
+@Injectable({ providedIn: 'root' })
+export class MyceliaService {
+  private service = createMyceliaService(buildSystem);
+
+  get system$(): Observable<any> {
+    return this.service.system$;
+  }
+
+  getSystem() {
+    return this.service.getSystem();
+  }
+
+  useFacet(kind: string) {
+    return this.service.useFacet(kind);
+  }
+
+  useListener(eventName: string, handler: Function) {
+    return this.service.useListener(eventName, handler);
+  }
+
+  async dispose() {
+    await this.service.dispose();
+  }
+}
+`;
+
+  writeFileSync(join(projectDir, 'src/app/services/mycelia.service.ts'), myceliaService, 'utf8');
+
+  // Create system builder
+  const systemBuilder = `import { useBase } from 'mycelia-kernel-plugin';
+import { useListeners } from 'mycelia-kernel-plugin';
+
+export async function buildSystem() {
+  return useBase('${projectName}')
+    .use(useListeners)
+    .build();
+}
+`;
+
+  writeFileSync(join(projectDir, 'src/mycelia/system.builder.ts'), systemBuilder, 'utf8');
+
+  // Create README
+  const readme = `# ${projectName}
+
+An Angular application built with Mycelia Plugin System.
+
+## Getting Started
+
+\`\`\`bash
+npm install
+ng serve
+\`\`\`
+
+## Structure
+
+- \`src/app/services/\` - Angular services (including MyceliaService)
+- \`src/app/components/\` - Angular components
+- \`src/mycelia/\` - Mycelia plugin code (framework-agnostic)
+`;
+
+  writeFileSync(join(projectDir, 'README.md'), readme, 'utf8');
+
+  console.log(`✅ Angular project created: ${projectDir}`);
+  console.log(`\nNext steps:`);
+  console.log(`  cd ${projectDir}`);
+  console.log(`  npm install`);
+  console.log(`  ng serve`);
+}
+
+/**
+ * Initialize a Qwik project with Mycelia bindings
+ */
+function initQwikProject(projectName) {
+  const projectDir = projectName;
+  
+  if (existsSync(projectDir)) {
+    console.error(`Error: Directory already exists: ${projectDir}`);
+    process.exit(1);
+  }
+
+  console.log(`Creating Qwik project: ${projectName}...`);
+
+  // Create directory structure
+  mkdirSync(projectDir, { recursive: true });
+  mkdirSync(join(projectDir, 'src'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/components'), { recursive: true });
+  mkdirSync(join(projectDir, 'src/mycelia'), { recursive: true });
+
+  // Create package.json
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    type: 'module',
+    scripts: {
+      dev: 'vite',
+      build: 'vite build',
+      preview: 'vite preview'
+    },
+    dependencies: {
+      'mycelia-kernel-plugin': '^1.3.0',
+      '@builder.io/qwik': '^1.0.0',
+      '@builder.io/qwik-city': '^1.0.0'
+    },
+    devDependencies: {
+      'vite': '^5.0.0',
+      '@vitejs/plugin-qwik': '^1.0.0'
+    }
+  };
+
+  writeFileSync(
+    join(projectDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2),
+    'utf8'
+  );
+
+  // Create App component
+  const appComponent = `import { component$ } from '@builder.io/qwik';
+import { MyceliaProvider } from 'mycelia-kernel-plugin/qwik';
+import { buildSystem } from './mycelia/system.builder.js';
+import { TodoApp } from './components/TodoApp';
+
+export default component$(() => {
+  return (
+    <MyceliaProvider build={buildSystem}>
+      <TodoApp />
+    </MyceliaProvider>
+  );
+});
+`;
+
+  writeFileSync(join(projectDir, 'src/App.tsx'), appComponent, 'utf8');
+
+  // Create system builder
+  const systemBuilder = `import { useBase } from 'mycelia-kernel-plugin';
+import { useListeners } from 'mycelia-kernel-plugin';
+
+export async function buildSystem() {
+  return useBase('${projectName}')
+    .use(useListeners)
+    .build();
+}
+`;
+
+  writeFileSync(join(projectDir, 'src/mycelia/system.builder.ts'), systemBuilder, 'utf8');
+
+  // Create example component
+  const todoComponent = `import { component$ } from '@builder.io/qwik';
+import { useFacet, useListener } from 'mycelia-kernel-plugin/qwik';
+
+export const TodoApp = component$(() => {
+  const todos = useFacet('todos');
+  useListener('todos:changed', (msg) => {
+    console.log('Todos changed:', msg.body);
+  });
+
+  return (
+    <div>
+      <h1>Todo App</h1>
+      {todos.value && <p>Todos facet loaded</p>}
+    </div>
+  );
+});
+`;
+
+  writeFileSync(join(projectDir, 'src/components/TodoApp.tsx'), todoComponent, 'utf8');
+
+  // Create README
+  const readme = `# ${projectName}
+
+A Qwik application built with Mycelia Plugin System.
+
+## Getting Started
+
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
+
+## Structure
+
+- \`src/components/\` - Qwik components
+- \`src/mycelia/\` - Mycelia plugin code (framework-agnostic)
+`;
+
+  writeFileSync(join(projectDir, 'README.md'), readme, 'utf8');
+
+  console.log(`✅ Qwik project created: ${projectDir}`);
+  console.log(`\nNext steps:`);
+  console.log(`  cd ${projectDir}`);
+  console.log(`  npm install`);
+  console.log(`  npm run dev`);
+}
+
+/**
  * Show help message
  */
 function showHelp() {
@@ -884,6 +1141,8 @@ Commands:
   init react [name]       Initialize a React project with Mycelia bindings
   init vue [name]         Initialize a Vue 3 project with Mycelia bindings
   init svelte [name]      Initialize a Svelte project with Mycelia bindings
+  init angular [name]     Initialize an Angular project with Mycelia bindings
+  init qwik [name]        Initialize a Qwik project with Mycelia bindings
   help                    Show this help message
 
 Examples:
@@ -893,6 +1152,8 @@ Examples:
   mycelia-kernel-plugin init react my-react-app
   mycelia-kernel-plugin init vue my-vue-app
   mycelia-kernel-plugin init svelte my-svelte-app
+  mycelia-kernel-plugin init angular my-angular-app
+  mycelia-kernel-plugin init qwik my-qwik-app
 
 For more information, visit:
   https://github.com/lesfleursdelanuitdev/mycelia-kernel-plugin-system

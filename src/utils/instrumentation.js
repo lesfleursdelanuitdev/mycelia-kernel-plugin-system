@@ -148,9 +148,9 @@ export async function instrumentDisposeCallback(facet, subsystem, disposeCallbac
   const thresholds = getThresholds(subsystem);
 
   const start = performance.now();
+  let errorOccurred = false;
   try {
     await disposeCallback(facet);
-  } finally {
     const duration = performance.now() - start;
     
     if (duration > thresholds.facetDispose) {
@@ -160,6 +160,20 @@ export async function instrumentDisposeCallback(facet, subsystem, disposeCallbac
       );
     } else {
       logger.log(`✓ Facet '${facetKind}' disposed in ${duration.toFixed(2)}ms [${facetSource}]`);
+    }
+  } catch (error) {
+    errorOccurred = true;
+    const duration = performance.now() - start;
+    logger.warn(
+      `⚠️  Facet disposal error: '${facetKind}' failed after ${duration.toFixed(2)}ms ` +
+      `[${facetSource}]: ${error.message}`
+    );
+    // Re-throw so disposeAll can catch and handle it
+    throw error;
+  } finally {
+    // Ensure timing is logged even if error occurred
+    if (!errorOccurred) {
+      // Already logged in try block
     }
   }
 }

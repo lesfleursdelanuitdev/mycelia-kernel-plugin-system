@@ -1,6 +1,6 @@
 # Mycelia Plugin System
 
-A sophisticated, **framework-agnostic** plugin system with transaction safety, lifecycle management, and official bindings for React, Vue 3, Svelte, Angular, and Qwik.
+A sophisticated, **framework-agnostic** plugin system with transaction safety, lifecycle management, and official bindings for React, Vue 3, Svelte, Angular, Qwik, and Solid.js.
 
 ## Overview
 
@@ -15,7 +15,7 @@ Mycelia Plugin System is a **framework-agnostic**, standalone plugin architectur
 - **Facet contracts** - Runtime validation of plugin interfaces
 - **Standalone mode** - Works without message system or other dependencies
 - **Built-in hooks** - Ships with `useListeners` for event-driven architectures (see [Simple Event System Example](#simple-event-system-example)), plus `useQueue` and `useSpeak`
-- **Framework bindings** - Official bindings for [React](#react-bindings), [Vue 3](#vue-bindings), [Svelte](#svelte-bindings), [Angular](#angular-bindings), and [Qwik](#qwik-bindings)
+- **Framework bindings** - Official bindings for [React](#react-bindings), [Vue 3](#vue-bindings), [Svelte](#svelte-bindings), [Angular](#angular-bindings), [Qwik](#qwik-bindings), and [Solid.js](#solidjs-bindings)
 
 **Facets** are the concrete runtime capabilities produced by hooks and attached to the system.
 
@@ -28,9 +28,10 @@ The system is designed to be framework-agnostic. Your domain logic lives in Myce
 - **Svelte** - Use `setMyceliaSystem` and Svelte stores (`useFacet`, `useListener`)
 - **Angular** - Use `MyceliaService` and RxJS observables (`useFacet`, `useListener`)
 - **Qwik** - Use `MyceliaProvider` and Qwik signals (`useFacet`, `useListener`)
+- **Solid.js** - Use `MyceliaProvider` and Solid.js signals (`useFacet`, `useListener`)
 - **Vanilla JS/Node.js** - Use the system directly without any framework bindings
 
-See the [React Todo App](./examples/react-todo/README.md), [Vue Todo App](./examples/vue-todo/README.md), and [Svelte Todo App](./examples/svelte-todo/README.md) examples - they all use the **exact same plugin code**, demonstrating true framework independence.
+See the [React Todo App](./examples/react-todo/README.md), [Vue Todo App](./examples/vue-todo/README.md), [Svelte Todo App](./examples/svelte-todo/README.md), and [Solid.js Todo App](./examples/solid-todo/README.md) examples - they all use the **exact same plugin code**, demonstrating true framework independence.
 
 ## Quick Start
 
@@ -346,10 +347,11 @@ See the `examples/` directory for:
   - Composition API integration with reactive state management
 
 - **[Svelte Todo App](./examples/svelte-todo/README.md)** ⭐ – A complete Svelte example demonstrating:
-  - **Framework-agnostic plugins** - Uses the same shared plugin code as React and Vue examples
+- **[Solid.js Todo App](./examples/solid-todo/README.md)** ⭐ – A complete Solid.js example demonstrating:
+  - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, and Svelte examples
   - Event-driven state synchronization (`todos:changed` events)
-  - Svelte bindings (`setMyceliaSystem`, `useFacet`, `useListener`)
-  - Store-based reactivity with automatic subscription
+  - Solid.js bindings (`MyceliaProvider`, `useFacet`, `useListener`)
+  - Signal-based reactivity with automatic updates
 
 - **[Angular Todo App](./examples/angular-todo/README.md)** ⭐ – A complete Angular example demonstrating:
   - **Framework-agnostic plugins** - Uses the same shared plugin code as React, Vue, and Svelte examples
@@ -363,7 +365,7 @@ See the `examples/` directory for:
   - Qwik bindings (`MyceliaProvider`, `useFacet`, `useListener`)
   - Qwik signals for reactive state management
 
-All five examples use the **exact same Mycelia plugin code** from `examples/todo-shared/`, proving that plugins are truly framework-independent. Write your domain logic once, use it everywhere!
+All six examples use the **exact same Mycelia plugin code** from `examples/todo-shared/`, proving that plugins are truly framework-independent. Write your domain logic once, use it everywhere!
 
 ## CLI Tool
 
@@ -393,6 +395,9 @@ npx mycelia-kernel-plugin init angular my-angular-app
 
 # Initialize a Qwik project with Mycelia bindings
 npx mycelia-kernel-plugin init qwik my-qwik-app
+
+# Initialize a Solid.js project with Mycelia bindings
+npx mycelia-kernel-plugin init solid my-solid-app
 ```
 
 Or install globally:

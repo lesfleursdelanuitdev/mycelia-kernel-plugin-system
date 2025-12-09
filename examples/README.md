@@ -16,7 +16,7 @@ Complete, runnable examples demonstrating the Mycelia Plugin System.
 - **[todo-shared/](./todo-shared/)** - Shared Mycelia plugin code
   - Framework-agnostic domain logic (`useTodos` hook)
   - System builder configuration
-  - Used by React, Vue, and Svelte examples
+  - Used by React, Vue, Svelte, Angular, and Qwik examples
   - Demonstrates plugin reusability across frameworks
 
 - **[react-todo/](./react-todo/)** - Complete React Todo application
@@ -40,6 +40,20 @@ Complete, runnable examples demonstrating the Mycelia Plugin System.
   - Uses shared plugin code from `todo-shared/`
   - See [svelte-todo/README.md](./svelte-todo/README.md) for details
 
+- **[angular-todo/](./angular-todo/)** - Complete Angular Todo application
+  - Demonstrates Angular bindings integration
+  - Event-driven state management with RxJS
+  - Plugin-based architecture
+  - Uses shared plugin code from `todo-shared/`
+  - See [angular-todo/README.md](./angular-todo/README.md) for details
+
+- **[qwik-todo/](./qwik-todo/)** - Complete Qwik Todo application
+  - Demonstrates Qwik bindings integration
+  - Event-driven state management with signals
+  - Plugin-based architecture
+  - Uses shared plugin code from `todo-shared/`
+  - See [qwik-todo/README.md](./qwik-todo/README.md) for details
+
 ## Running Examples
 
 ### Node.js Examples
@@ -55,13 +69,15 @@ node examples/use-queue-example.js
 
 ### Framework Integration Examples
 
-Both React and Vue Todo examples require their respective frameworks and a bundler:
+All framework Todo examples require their respective frameworks and a bundler:
 
 - **React Todo**: Requires React and a bundler. See [react-todo/README.md](./react-todo/README.md) for setup instructions.
 - **Vue Todo**: Requires Vue 3 and a bundler. See [vue-todo/README.md](./vue-todo/README.md) for setup instructions.
 - **Svelte Todo**: Requires Svelte and a bundler. See [svelte-todo/README.md](./svelte-todo/README.md) for setup instructions.
+- **Angular Todo**: Requires Angular and Angular CLI. See [angular-todo/README.md](./angular-todo/README.md) for setup instructions.
+- **Qwik Todo**: Requires Qwik and Vite. See [qwik-todo/README.md](./qwik-todo/README.md) for setup instructions.
 
-**Note**: All three examples use the same shared Mycelia plugin code from `todo-shared/`, demonstrating that plugins are framework-agnostic and can be reused across different UI frameworks.
+**Note**: All five examples use the same shared Mycelia plugin code from `todo-shared/`, demonstrating that plugins are framework-agnostic and can be reused across different UI frameworks.
 
 ## Example Highlights
 
@@ -127,6 +143,22 @@ Complete Svelte application showing:
 - Separation of concerns (plugin logic vs UI)
 - Uses shared plugin code from `todo-shared/`
 
+### angular-todo/
+
+Complete Angular application showing:
+- Angular bindings (`MyceliaService`, `useFacet`, `useListener`)
+- Event-driven state synchronization with RxJS observables
+- Separation of concerns (plugin logic vs UI)
+- Uses shared plugin code from `todo-shared/`
+
+### qwik-todo/
+
+Complete Qwik application showing:
+- Qwik bindings (`MyceliaProvider`, `useFacet`, `useListener`)
+- Event-driven state synchronization with Qwik signals
+- Separation of concerns (plugin logic vs UI)
+- Uses shared plugin code from `todo-shared/`
+
 ## Learning Path
 
 1. **Start with hello-world.js** - Understand basic concepts
@@ -137,6 +169,8 @@ Complete Svelte application showing:
 6. **Study react-todo/** - See full React integration
 7. **Study vue-todo/** - See full Vue integration (uses same plugin as React)
 8. **Study svelte-todo/** - See full Svelte integration (uses same plugin as React and Vue)
+9. **Study angular-todo/** - See full Angular integration (uses same plugin as React, Vue, and Svelte)
+10. **Study qwik-todo/** - See full Qwik integration (uses same plugin as all other frameworks)
 
 ## See Also
 
@@ -144,6 +178,8 @@ Complete Svelte application showing:
 - [React Bindings Documentation](../docs/react/README.md) - React integration guide
 - [Vue Bindings Documentation](../docs/vue/README.md) - Vue integration guide
 - [Svelte Bindings Documentation](../docs/svelte/README.md) - Svelte integration guide
+- [Angular Bindings Documentation](../docs/angular/README.md) - Angular integration guide
+- [Qwik Bindings Documentation](../docs/qwik/README.md) - Qwik integration guide
 - [Built-in Hooks Documentation](../docs/hooks/README.md) - Hook documentation
 - [Standalone Plugin System](../docs/standalone/STANDALONE-PLUGIN-SYSTEM.md) - Core system guide
 

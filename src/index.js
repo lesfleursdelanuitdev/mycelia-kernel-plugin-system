@@ -34,6 +34,17 @@ export { useListeners } from './hooks/listeners/use-listeners.js';
 export { useQueue } from './hooks/queue/use-queue.js';
 export { useSpeak } from './hooks/speak/use-speak.js';
 
+// Framework bindings are available via subpath exports:
+// - 'mycelia-kernel-plugin/react' for React bindings
+// - 'mycelia-kernel-plugin/vue' for Vue bindings
+// - 'mycelia-kernel-plugin/svelte' for Svelte bindings
+// - 'mycelia-kernel-plugin/angular' for Angular bindings
+// - 'mycelia-kernel-plugin/qwik' for Qwik bindings
+// - 'mycelia-kernel-plugin/solid' for Solid.js bindings
+// 
+// They are not re-exported from the main entry point to avoid
+// requiring framework dependencies when using the core system.
+
 // Utility exports
 export { createLogger, createSubsystemLogger } from './utils/logger.js';
 export { getDebugFlag } from './utils/debug-flag.js';

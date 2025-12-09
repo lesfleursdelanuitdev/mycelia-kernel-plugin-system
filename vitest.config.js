@@ -1,6 +1,18 @@
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  esbuild: {
+    loader: 'jsx',
+    include: /src\/.*\.js$/,
+    exclude: [],
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
+  },
   test: {
     environment: 'node',
     include: [
