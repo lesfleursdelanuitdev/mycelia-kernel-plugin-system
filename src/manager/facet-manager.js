@@ -510,12 +510,20 @@ export class FacetManager {
   }
   
   clear() {
-    // Dispose all facets before clearing
+    // Dispose all facets before clearing (synchronous best-effort)
+    // Note: dispose() is async, but clear() is synchronous
+    // For async disposal, use disposeAll() instead
     for (const [, facets] of this.#facets.entries()) {
       if (Array.isArray(facets)) {
         for (const facet of facets) {
           try {
-            facet?.dispose?.(this.#subsystem);
+            const disposeResult = facet?.dispose?.(this.#subsystem);
+            // If dispose returns a promise, catch any errors to prevent unhandled rejections
+            if (disposeResult && typeof disposeResult.catch === 'function') {
+              disposeResult.catch(() => {
+                // Best-effort disposal - errors are expected and handled
+              });
+            }
           } catch {
             // Best-effort disposal
           }
@@ -523,7 +531,13 @@ export class FacetManager {
       } else {
         // Legacy: single facet
         try {
-          facets?.dispose?.(this.#subsystem);
+          const disposeResult = facets?.dispose?.(this.#subsystem);
+          // If dispose returns a promise, catch any errors to prevent unhandled rejections
+          if (disposeResult && typeof disposeResult.catch === 'function') {
+            disposeResult.catch(() => {
+              // Best-effort disposal - errors are expected and handled
+            });
+          }
         } catch {
           // Best-effort disposal
         }

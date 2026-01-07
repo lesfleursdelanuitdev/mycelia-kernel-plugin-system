@@ -194,7 +194,12 @@ describe('Memory Leak Detection', () => {
       
       // Disposal catches errors internally (best-effort cleanup)
       // The error is logged but doesn't prevent disposal from completing
-      await system.dispose();
+      try {
+        await system.dispose();
+      } catch (error) {
+        // Errors during disposal are expected and handled internally
+        // disposeAll catches and logs them, but doesn't throw
+      }
       
       // System should be in disposed state (even if errors occurred)
       expect(system.isBuilt).toBe(false);

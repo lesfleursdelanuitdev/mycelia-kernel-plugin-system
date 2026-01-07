@@ -247,8 +247,8 @@ class UseBaseBuilder {
     // Get existing config for this kind (from pending or system if created)
     let existingConfig;
     if (this.#system) {
-      if (!this.#system.ctx.config || typeof this.#system.ctx.config !== 'object') {
-        this.#system.ctx.config = {};
+    if (!this.#system.ctx.config || typeof this.#system.ctx.config !== 'object') {
+      this.#system.ctx.config = {};
       }
       existingConfig = this.#system.ctx.config[kind];
     } else {
