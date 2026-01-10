@@ -35,7 +35,7 @@
     "./system": "./src/system/index.js",
     "./contract": "./src/contract/index.js",
     "./contract/contracts": "./src/contract/contracts/index.js",
-    "./react": "./src/react/index.js",
+    "./react": "./src/react/index.jsx",
     "./vue": "./src/vue/index.js",
     "./svelte": "./src/svelte/index.js",
     "./angular": "./src/angular/index.js",
